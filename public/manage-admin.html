@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/manage-admin.css">
+    <script src="./js/a076d05399.js"></script>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <title>Manage Admin</title>
+</head>
+
+<body>
+    <nav>
+        <input type="checkbox" id="check">
+        <label for="check" class="checkbtn">
+            <i class="fas fa-bars"></i>
+        </label>
+        <label class="logo">Espasyo</label>
+        <ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a class="active" href="manage-admin.html">Manage Admin</a></li>
+            <li><a href="reports.html">Reports</a></li>
+            <li><a id="out" onclick="logout()"><b>Logout</b></a></li>
+        </ul>
+    </nav>
+
+    <h1> Manage Admin</h1><br />
+    <div class="form-container">
+        <input type="text" id="firstNameInput" class="signUpInputs" placeholder="First name" required><br>
+        <input type="text" id="lastNameInput" class="signUpInputs" placeholder="Last name" required><br>
+        <input type="email" id="emailInput" class="signUpInputs" placeholder="Email" required><br>
+        <input type="password" id="passwordInput" class="signUpInputs" placeholder="Password" required><br>
+        <button class="btn-add-new-admin" onclick="signUp()">Create New Admin</button>
+    </div>
+
+    <button class="btnLogin" onclick="isUserLoggedIn()">User Status</button><br>
+
+
+    <div class="div1">
+        <table class="info">
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Password</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Kyra</td>
+                    <td>Vergara</td>
+                    <td>kjdv13@gmail.com</td>
+                    <td>test123!</td>
+                    <td><button>Edit</button></td>
+                </tr>
+
+                <tr>
+                    <td>Mike</td>
+                    <td>Vinoya</td>
+                    <td>mike@gmail.com</td>
+                    <td>admin777</td>
+                    <td><button>Edit</button></td>
+
+                </tr>
+                <tr>
+                    <td>Ivee</td>
+                    <td>Viloria</td>
+                    <td>Ivee@gmail.com</td>
+                    <td>piit27</td>
+                    <td><button>Edit</button></td>
+
+                </tr>
+                <tr>
+                    <td>Kyzyll</td>
+                    <td>Ugot</td>
+                    <td>kyzyll@gmail.com</td>
+                    <td>genshin123</td>
+                    <td><button>Edit</button></td>
+
+                </tr>
+                <tr>
+                    <td>Danica</td>
+                    <td>Castillo</td>
+                    <td>danica@gmail.com</td>
+                    <td>danicaaaa</td>
+                    <td><button>Edit</button></td>
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- core firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <!-- SDK or firebase services -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    <script src="./js/firebaseConfig.js"></script>
+    <script src="./js/authentication.js"></script>
+
+    <script>
+        
+        window.onload = function () {
+            if (getIsSuperAdmin() == "false") {
+                document.getElementById("btn-manage-admin").style.display = "none";
+            }
+        }
+    </script>
+</body>
+
+</html>
