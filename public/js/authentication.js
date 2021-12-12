@@ -1,6 +1,6 @@
 // This is for the authentication of users (signup, login, logout, sending email verifications)
 
-const loggedSuperAdmin = null;
+var isLoggingIn = false;
 function signUp() {
   //get all input from user
   firstName = document.getElementById('firstNameInput').value;
@@ -26,7 +26,7 @@ function signUp() {
     return;
   }
 
-  //creates user with email and password
+  //creates user with email and password using the secondaryAppAuth
   secondAppAuth.createUserWithEmailAndPassword(email, password)
     .then(function () {
       var newAdmin = secondAppAuth.currentUser;
@@ -35,7 +35,7 @@ function signUp() {
         window.alert("newly created user signed out");
         window.location.reload();
       });
-      // saveUserDataToDatabase(newAdmin);
+      saveUserDataToDatabase(newAdmin);
 
       //sendEmailVerification();
       //reload to refresh list of landlords
@@ -62,10 +62,12 @@ function login() {
     .then(function () {
       var user = auth.currentUser;
 
-      window.alert(user.emailVerified);
-
+      window.alert("up here");
+      isLoggingIn = true;
       var adminDocRef = database.collection("users").doc(user.uid);
+      window.alert("middle here");
       adminDocRef.get().then((doc) => {
+        window.alert("inside here");
         if (doc.exists) {
           window.alert("Userrole: " + doc.data().userRole);
           var userRole = doc.data().userRole
@@ -92,6 +94,8 @@ function login() {
       }).catch((error) => {
         console.log("Error getting document:", error);
       });
+
+      window.alert("bottom here");
     })
     .catch(function (error) {
       var error_code = error.code;
@@ -159,14 +163,17 @@ function validateInput(input) {
 
 auth.onAuthStateChanged(function (user) {
   if (user != null) {
-    window.alert("User: " + user.uid);
-    if (window.location.pathname == "/public/index.html") {
-      window.location.replace("/public/home.html");
+    if (isLoggingIn == false) {
+      if (window.location.pathname == "/public/index.html") {
+        //window.location.replace("/public/home.html");
+        window.history.back();
+      }
+    } else {
+      window.alert("logging in");
     }
   } else {
     if (window.location.pathname != "/public/index.html") {
       window.location.replace("/public/index.html");
-      window.alert("already in index.html");
     }
   }
 });
@@ -183,6 +190,9 @@ function getIsSuperAdmin() {
 function removeIsSuperAdmin() {
   sessionStorage.removeItem("isSuperAdmin");
 }
+
+
+
 //for testing==================
 
 function isUserLoggedIn() {
@@ -200,6 +210,14 @@ function whoIsUser() {
     window.alert("user is: null " + loggedSuperAdmin);
   } else {
     window.alert("user is: " + user.uid);
+  }
+}
+
+function isAuth1EqualsAuth2() {
+  if (auth == secondAppAuth) {
+    window.alert("same auth");
+  } else {
+    window.alert("not same auth");
   }
 }
 

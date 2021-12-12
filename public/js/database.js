@@ -6,6 +6,7 @@ function isDatabaseNull() {
     }
 }
 
+//for saving data of newly created admin to firestore
 function saveUserDataToDatabase(newAdmin) {
     var newAdminID = newAdmin.uid;
 
