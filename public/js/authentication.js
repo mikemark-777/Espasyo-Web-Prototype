@@ -27,19 +27,19 @@ function signUp() {
   }
 
   //creates user with email and password
-  auth.createUserWithEmailAndPassword(email, password)
+  secondAppAuth.createUserWithEmailAndPassword(email, password)
     .then(function () {
-      var newAdmin = auth.currentUser;
-      window.alert("New Admin has been created!"); 
-      auth.signOut().then(() => {
+      var newAdmin = secondAppAuth.currentUser;
+      window.alert("New Admin has been created!");
+      secondAppAuth.signOut().then(() => {
         window.alert("newly created user signed out");
         window.location.reload();
       });
-     // saveUserDataToDatabase(newAdmin);
-     
+      // saveUserDataToDatabase(newAdmin);
+
       //sendEmailVerification();
       //reload to refresh list of landlords
-      
+
     })
     .catch(function (error) {
       var error_code = error.code;
@@ -119,12 +119,12 @@ function logout() {
 function sendEmailVerification() {
   // code for send email verification to newly created email of landlord
   auth.currentUser.sendEmailVerification()
-  .then(() => {
-      window.alert("Verification has been sent to email: "  + user.email);
-  })
-  .catch(error => {
+    .then(() => {
+      window.alert("Verification has been sent to email: " + user.email);
+    })
+    .catch(error => {
 
-  });
+    });
 }
 
 
@@ -157,15 +157,6 @@ function validateInput(input) {
   }
 }
 
-function whoIsUser() {
-  var user = auth.currentUser;
-  if (user == null) {
-    window.alert("user is: null " + loggedSuperAdmin);
-  } else {
-      window.alert("user is: " + user.uid);
-  }
-}
-
 auth.onAuthStateChanged(function (user) {
   if (user != null) {
     window.alert("User: " + user.uid);
@@ -192,6 +183,7 @@ function getIsSuperAdmin() {
 function removeIsSuperAdmin() {
   sessionStorage.removeItem("isSuperAdmin");
 }
+//for testing==================
 
 function isUserLoggedIn() {
   var user = auth.currentUser;
@@ -199,6 +191,15 @@ function isUserLoggedIn() {
     window.alert("user is not null :" + user.uid);
   } else {
     window.alert("user is null");
+  }
+}
+
+function whoIsUser() {
+  var user = auth.currentUser;
+  if (user == null) {
+    window.alert("user is: null " + loggedSuperAdmin);
+  } else {
+    window.alert("user is: " + user.uid);
   }
 }
 

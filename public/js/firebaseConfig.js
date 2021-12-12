@@ -8,7 +8,13 @@ const firebaseConfig = {
     appId: "1:766216641228:web:ed7fd89183d00911574069"
 };
 //initialize firebase
-firebase.initializeApp(firebaseConfig);
+const espasyoWebApp = firebase.initializeApp(firebaseConfig);
 
-const auth = firebase.auth();
-const database = firebase.firestore();
+const auth = espasyoWebApp.auth();
+const database = espasyoWebApp.firestore();
+
+
+//for creation of admin account ONLY ===============================================
+const secondApp = firebase.initializeApp(firebaseConfig, "secondApp");
+const secondAppAuth = secondApp.auth();
+
