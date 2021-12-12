@@ -1,4 +1,6 @@
 // This is for the authentication of users (signup, login, logout, sending email verifications)
+
+const loggedSuperAdmin = null;
 function signUp() {
   //get all input from user
   firstName = document.getElementById('firstNameInput').value;
@@ -27,9 +29,17 @@ function signUp() {
   //creates user with email and password
   auth.createUserWithEmailAndPassword(email, password)
     .then(function () {
-      var user = auth.currentUser;
-      window.alert("New Admin has been created!");
-      window.location.reload();
+      var newAdmin = auth.currentUser;
+      window.alert("New Admin has been created!"); 
+      auth.signOut().then(() => {
+        window.alert("newly created user signed out");
+        window.location.reload();
+      });
+     // saveUserDataToDatabase(newAdmin);
+     
+      //sendEmailVerification();
+      //reload to refresh list of landlords
+      
     })
     .catch(function (error) {
       var error_code = error.code;
@@ -51,7 +61,8 @@ function login() {
   auth.signInWithEmailAndPassword(email, password)
     .then(function () {
       var user = auth.currentUser;
-      window.alert(user.uid);
+
+      window.alert(user.emailVerified);
 
       var adminDocRef = database.collection("users").doc(user.uid);
       adminDocRef.get().then((doc) => {
@@ -63,6 +74,7 @@ function login() {
             window.alert("Welcome Super Admin!");
             window.location.assign("home.html");
             setIsSuperAdmin(true);
+            loggedSuperAdmin = user;
           } else if (userRole == 1) {
             //go to admin
             window.alert("Welcome Admin!");
@@ -104,8 +116,15 @@ function logout() {
   });
 }
 
-function sendEmailVerificationTo(email) {
+function sendEmailVerification() {
   // code for send email verification to newly created email of landlord
+  auth.currentUser.sendEmailVerification()
+  .then(() => {
+      window.alert("Verification has been sent to email: "  + user.email);
+  })
+  .catch(error => {
+
+  });
 }
 
 
@@ -138,26 +157,24 @@ function validateInput(input) {
   }
 }
 
-function isUserNull() {
+function whoIsUser() {
   var user = auth.currentUser;
   if (user == null) {
-    return true;
-    //window.alert("user null");
+    window.alert("user is: null " + loggedSuperAdmin);
   } else {
-    return false;
-    //window.alert("user not null");
+      window.alert("user is: " + user.uid);
   }
 }
 
 auth.onAuthStateChanged(function (user) {
   if (user != null) {
     window.alert("User: " + user.uid);
-    if (window.location.pathname == "/index.html") {
-      window.location.replace("/home.html");
+    if (window.location.pathname == "/public/index.html") {
+      window.location.replace("/public/home.html");
     }
   } else {
-    if (window.location.pathname != "/index.html") {
-      window.location.replace("/index.html");
+    if (window.location.pathname != "/public/index.html") {
+      window.location.replace("/public/index.html");
       window.alert("already in index.html");
     }
   }
@@ -184,3 +201,4 @@ function isUserLoggedIn() {
     window.alert("user is null");
   }
 }
+
