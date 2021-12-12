@@ -4,7 +4,7 @@ var isLoggingIn = false;
 function signUp() {
   //get all input from user
   firstName = document.getElementById('firstNameInput').value;
-  lastName = document.getElementById('firstNameInput').value;
+  lastName = document.getElementById('lastNameInput').value;
   email = document.getElementById('emailInput').value;
   password = document.getElementById('passwordInput').value;
 
