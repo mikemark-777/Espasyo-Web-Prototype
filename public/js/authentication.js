@@ -1,12 +1,13 @@
 // This is for the authentication of users (signup, login, logout, sending email verifications)
 
 var isLoggingIn = false;
+
 function signUp() {
   //get all input from user
-  firstName = document.getElementById('firstNameInput').value;
-  lastName = document.getElementById('lastNameInput').value;
-  email = document.getElementById('emailInput').value;
-  password = document.getElementById('passwordInput').value;
+  var firstName = document.getElementById('firstNameInput').value;
+  var lastName = document.getElementById('lastNameInput').value;
+  var email = document.getElementById('emailInput').value;
+  var password = document.getElementById('passwordInput').value;
 
   //check if inputs are empty
   if (validateInput(firstName) == false || validateInput(lastName) == false || validateInput(email) == false || validateInput(password) == false) {
@@ -25,19 +26,30 @@ function signUp() {
     window.alert("Password must be greater than 6");
     return;
   }
+   
+  email
 
   //creates user with email and password using the secondaryAppAuth
   secondAppAuth.createUserWithEmailAndPassword(email, password)
     .then(function () {
       var newAdmin = secondAppAuth.currentUser;
-      window.alert("New Admin has been created!");
-      secondAppAuth.signOut().then(() => {
-        window.alert("newly created user signed out");
-        window.location.reload();
-      });
-      saveUserDataToDatabase(newAdmin);
+      var newAdminID = newAdmin.uid;
+
+      //create a new admin object
+      const adminObj = new Admin(newAdminID, firstName, lastName, email, password, 1);
+
+      window.alert("id of admin: " + adminObj.adminID);
+
+     saveUserDataToDatabase(adminObj);
+      // window.alert("New Admin has been created!"); 
+      // secondAppAuth.signOut().then(() => {
+      //   window.alert("has reloaded after signout");
+      //   window.location.reload();
+      // });
 
       //sendEmailVerification();
+
+
       //reload to refresh list of landlords
 
     })
