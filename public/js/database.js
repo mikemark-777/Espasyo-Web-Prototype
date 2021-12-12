@@ -9,26 +9,50 @@ function isDatabaseNull() {
 //for saving data of newly created admin to firestore
 function saveUserDataToDatabase(newAdmin) {
 
-    // const admin = new Admin();
-    // admin = newAdmin;
+    // if (newAdmin === null) {
+    //     window.alert("newAdmin null");
+    // } else {
+    //     window.alert(newAdmin.adminID);
+    //     window.alert(newAdmin.firstName);
+    //     window.alert(newAdmin.lastName);
+    //     window.alert(newAdmin.email);
+    //     window.alert(newAdmin.password);
+    //     window.alert(newAdmin.userRole);
+    // }
 
-    if (newAdmin === null) {
-        window.alert("newAdmin null");
-    } else {
-        window.alert("newAdmin not null "  + newAdmin.adminID);
-    }
+    //extract data for user object
+    var userID = newAdmin.adminID;
+    var email = newAdmin.email;
+    var password = newAdmin.password;
+    var userRole = newAdmin.userRole;
 
-    // var userID = newAdmin.adminID;
-    // var email = newAdmin.email;
-    // var password = newAdmin.password;
-    // var userRole = newAdmin.userRole;
+    const userObj = new User(userID, email, password, userRole);
+    var userDocRef = database.collection("users").doc(userID);
+    var adminDocRef = database.collection("admins").doc(userID);
 
-    //create a user object
-    //var newUser = new User(userID, email, password, userRole);
+    userDocRef.withConverter(userConverter)
+        .set(userObj)
+        .then(function () {
+            adminDocRef.withConverter(adminConverter)
+                .set(newAdmin)
+                .then(function () {
+                    window.alert("New Admin has been created!");
+                    window.location.reload();
+                })
+                .catch(function (error) {
+                    var error_code = error.code;
+                    var error_message = error.message;
+        
+                    window.alert(error_code);
+                });
+        })
+        .catch(function (error) {
+            var error_code = error.code;
+            var error_message = error.message;
 
-    // window.alert("userrole: " + admin.userRole);
+            window.alert(error_code);
+        });
 
-    //var adminDocRef = database.collection("admins").doc(newAdminID);
 }
 
 // ============= custom javascript objects and converters =====================//
@@ -46,8 +70,6 @@ const userConverter = {
     toFirestore: function (user) {
         return {
             userID: user.userID,
-            firstName: user.firstName,
-            lastName: user.lastName,
             email: user.email,
             password: user.password,
             userRole: user.userRole
@@ -55,7 +77,7 @@ const userConverter = {
     },
     fromFirestore: function (snapshot, options) {
         const data = snapshot.data(options);
-        return new User(data.userID, data.firstName, data.lastName, data.email, data.pasword, data.userRole);
+        return new User(data.userID, data.email, data.password, data.userRole);
     }
 }
 
@@ -70,14 +92,6 @@ class Admin {
     }
 }
 
-// const Admin = {
-//     adminID: 'abcd-1234', 
-//     firstName: 'Juan',
-//     lastName: 'Dela Cruz',
-//     email: 'juan@gmail.com',
-//     password: '123456',
-//     userRole: 0
-//   };
 
 const adminConverter = {
     toFirestore: function (admin) {

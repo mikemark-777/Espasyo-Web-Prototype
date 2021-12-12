@@ -10,7 +10,7 @@ body{
     font-family: Calibri;
 }
 nav{
-    background: #0082e6;
+    background: #007EB1;
     height: 80px;
     width: 100%;
 }
@@ -36,6 +36,7 @@ nav ul li a{
     padding: 7px 13px;
     border-radius: 3px;
     text-transform: uppercase;
+    text-decoration: none;
 }
 a.active,a:hover{
     background: #1b9bff;
@@ -93,6 +94,7 @@ a.active,a:hover{
     a:hover,a.active{
         background: none;
         color: #0082e6;
+        text-decoration: none;
     }
     #check:checked ~ ul{
         left: 0;
