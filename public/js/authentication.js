@@ -176,7 +176,7 @@ function validateInput(input) {
 auth.onAuthStateChanged(function (user) {
   if (user != null) {
     if (isLoggingIn == false) {
-      if (window.location.pathname == "/public/index.html") {
+      if (window.location.pathname == "index.html") {
         //window.location.replace("/public/home.html");
         window.history.back();
       }
@@ -184,8 +184,8 @@ auth.onAuthStateChanged(function (user) {
       window.alert("logging in");
     }
   } else {
-    if (window.location.pathname != "/public/index.html") {
-      window.location.replace("/public/index.html");
+    if (window.location.pathname != "/index.html") {
+      window.location.replace("/index.html");
     }
   }
 });
