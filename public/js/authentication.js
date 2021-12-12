@@ -26,7 +26,7 @@ function signUp() {
     window.alert("Password must be greater than 6");
     return;
   }
-   
+
   email
 
   //creates user with email and password using the secondaryAppAuth
@@ -38,19 +38,31 @@ function signUp() {
       //create a new admin object
       const adminObj = new Admin(newAdminID, firstName, lastName, email, password, 1);
 
-      window.alert("id of admin: " + adminObj.adminID);
+      //this will save the user to the firestore database
+      saveUserDataToDatabase(adminObj);
 
-     saveUserDataToDatabase(adminObj);
-      // window.alert("New Admin has been created!"); 
-      // secondAppAuth.signOut().then(() => {
-      //   window.alert("has reloaded after signout");
-      //   window.location.reload();
-      // });
+      //this will send an email verification to the email of the admin and then logout it here
+      secondAppAuth.currentUser.sendEmailVerification()
+        .then(() => {
+          window.alert("An email verification has been sent to " + email + ". Please check the email and click the link to complete setting up the admin account. \n\nThank you");
+          secondAppAuth.signOut().then(() => {
+            //for reload of admin list
+            window.location.reload();
+          })
+            .catch(error => {
+              var error_code = error.code;
+              var error_message = error.message;
 
-      //sendEmailVerification();
+              window.alert(error_code);
+            });
+        })
+        .catch(error => {
+          var error_code = error.code;
+          var error_message = error.message;
 
+          window.alert(error_code);
+        });
 
-      //reload to refresh list of landlords
 
     })
     .catch(function (error) {
