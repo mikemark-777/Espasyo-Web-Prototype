@@ -1,4 +1,4 @@
-*{
+* {
     padding: 0;
     margin: 0;
     text-decoration: none;
@@ -6,31 +6,36 @@
     box-sizing: border-box;
 }
 
-body{
+body {
     font-family: Calibri;
 }
-nav{
+
+nav {
     background: #007EB1;
     height: 80px;
     width: 100%;
 }
-label.logo{
+
+label.logo {
     color: white;
     font-size: 35px;
     line-height: 80px;
     padding: 0 100px;
     font-weight: bold;
 }
-nav ul{
-float: right;
-margin-right: 20px;
+
+nav ul {
+    float: right;
+    margin-right: 20px;
 }
-nav ul li{
-    display:inline-block;
+
+nav ul li {
+    display: inline-block;
     line-height: 80px;
     margin: 0 5px;
 }
-nav ul li a{
+
+nav ul li a {
     color: white;
     font-size: 17px;
     padding: 7px 13px;
@@ -38,11 +43,14 @@ nav ul li a{
     text-transform: uppercase;
     text-decoration: none;
 }
-a.active,a:hover{
+
+a.active,
+a:hover {
     background: #1b9bff;
     transition: .5s;
 }
-.checkbtn{
+
+.checkbtn {
     font-size: 30px;
     color: white;
     float: right;
@@ -51,29 +59,30 @@ a.active,a:hover{
     cursor: pointer;
     display: none;
 }
-#check{
-    display: none;
 
+#check {
+    display: none;
 }
+
 @media (max-width: 952px) {
-    label.logo{
+    label.logo {
         font-size: 30px;
         padding-left: 50px;
-
     }
     nav ul li a {
         font-size: 30px;
         padding-left: 50px;
     }
-    nav ul li a{
+    nav ul li a {
         font-size: 16px;
     }
 }
+
 @media (max-width: 858px) {
-    .checkbtn{
+    .checkbtn {
         display: block;
     }
-    ul{
+    ul {
         position: fixed;
         width: 100%;
         height: 100vh;
@@ -83,35 +92,36 @@ a.active,a:hover{
         text-align: center;
         transition: all .5s;
     }
-    nav ul li{
+    nav ul li {
         display: block;
         margin: 50px 0;
         line-height: 30px;
     }
-    nav ul li a{
+    nav ul li a {
         font-size: 20px;
     }
-    a:hover,a.active{
+    a:hover,
+    a.active {
         background: none;
         color: #0082e6;
         text-decoration: none;
     }
-    #check:checked ~ ul{
+    #check:checked~ul {
         left: 0;
-
     }
 }
 
 #out:hover {
-    cursor:pointer;
+    cursor: pointer;
 }
 
-.div1{
+.div1 {
     margin: 50px;
     width: auto;
     background-color: #2c3e50;
 }
-.div1 thead th{
+
+.div1 thead th {
     position: sticky;
     top: 0;
     background-color: black;
@@ -119,7 +129,8 @@ a.active,a:hover{
     font-size: 15px;
     font-weight: 700;
 }
-.info{
+
+.info {
     width: auto;
     box-sizing: border-box;
     width: 100%;
@@ -129,11 +140,14 @@ a.active,a:hover{
     margin-right: auto;
     font-family: 'Roboto', sans-serif;
 }
-table{
+
+table {
     border-collapse: collapse;
     height: 300px;
 }
-th, td{
+
+th,
+td {
     padding: 10px 20px;
     font-size: 14px;
 }
@@ -150,6 +164,7 @@ th, td{
     -webkit-transition: 0.3s;
     -moz-transition: 0.3s;
 }
+
 .btn-add-new-admin:hover {
     background: #fff;
     color: #3291B6;
@@ -175,7 +190,9 @@ button:hover {
 .form-container {
     width: 100%;
     height: fit-content;
-    padding-left: 50px;
+    padding-left: 110px;
+    padding-top: 20px;
+    padding-right: 20px;
     margin: 10px;
 }
 
@@ -197,11 +214,20 @@ button:hover {
     border: 1px solid #777;
 }
 
-.create-new-admin-container, .list-of-landlord-container {
+.create-new-admin-container,
+.list-of-landlord-container {
     float: left;
+}
+
+.create-new-admin-container {
+    /* background-color: cornflowerblue; */
+}
+
+.list-of-landlord-container {
+    padding-top: 20px;
+    height: auto;
 }
 
 .form-container .create-new-admin-text {
     margin-top: 20px;
 }
-

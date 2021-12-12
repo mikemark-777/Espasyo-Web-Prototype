@@ -3,216 +3,223 @@
 var isLoggingIn = false;
 
 function signUp() {
-  //get all input from user
-  var firstName = document.getElementById('firstNameInput').value;
-  var lastName = document.getElementById('lastNameInput').value;
-  var email = document.getElementById('emailInput').value;
-  var password = document.getElementById('passwordInput').value;
+    //get all input from user
+    var firstName = document.getElementById('firstNameInput').value;
+    var lastName = document.getElementById('lastNameInput').value;
+    var email = document.getElementById('emailInput').value;
+    var password = document.getElementById('passwordInput').value;
 
-  //check if inputs are empty
-  if (validateInput(firstName) == false || validateInput(lastName) == false || validateInput(email) == false || validateInput(password) == false) {
-    window.alert("Please fillout everything");
-    return;
-  }
+    //check if inputs are empty
+    if (validateInput(firstName) == false || validateInput(lastName) == false || validateInput(email) == false || validateInput(password) == false) {
+        window.alert("Please fillout everything");
+        return;
+    }
 
-  //check email if is in correct format
-  if (validateEmail(email) == false) {
-    window.alert("Email has an incorrect format");
-    return;
-  }
+    //check email if is in correct format
+    if (validateEmail(email) == false) {
+        window.alert("Email has an incorrect format");
+        return;
+    }
 
-  //check password if greater than 6 (firebaseauth accepts >= 6 password)
-  if (validatePassword(password) == false) {
-    window.alert("Password must be greater than 6");
-    return;
-  }
+    //check password if greater than 6 (firebaseauth accepts >= 6 password)
+    if (validatePassword(password) == false) {
+        window.alert("Password must be greater than 6");
+        return;
+    }
 
-  email
+    email
 
-  //creates user with email and password using the secondaryAppAuth
-  secondAppAuth.createUserWithEmailAndPassword(email, password)
-    .then(function () {
-      var newAdmin = secondAppAuth.currentUser;
-      var newAdminID = newAdmin.uid;
+    //creates user with email and password using the secondaryAppAuth
+    secondAppAuth.createUserWithEmailAndPassword(email, password)
+        .then(function() {
+            var newAdmin = secondAppAuth.currentUser;
+            var newAdminID = newAdmin.uid;
 
-      //create a new admin object
-      const adminObj = new Admin(newAdminID, firstName, lastName, email, password, 1);
+            //create a new admin object
+            const adminObj = new Admin(newAdminID, firstName, lastName, email, password, 1);
 
-      //this will save the user to the firestore database
-      saveUserDataToDatabase(adminObj);
+            //this will save the user to the firestore database
+            saveUserDataToDatabase(adminObj);
 
-      //this will send an email verification to the email of the admin and then logout it here
-      secondAppAuth.currentUser.sendEmailVerification()
-        .then(() => {
-          window.alert("An email verification has been sent to " + email + ". Please check the email and click the link to complete setting up the admin account. \n\nThank you");
-          secondAppAuth.signOut().then(() => {
-            //for reload of admin list
-            window.location.reload();
-          })
-            .catch(error => {
-              var error_code = error.code;
-              var error_message = error.message;
+            //this will send an email verification to the email of the admin and then logout it here
+            secondAppAuth.currentUser.sendEmailVerification()
+                .then(() => {
+                    window.alert("An email verification has been sent to " + email + ". Please check the email and click the link to complete setting up the admin account. \n\nThank you");
+                    secondAppAuth.signOut().then(() => {
+                            //for reload of admin list
+                            window.location.reload();
+                        })
+                        .catch(error => {
+                            var error_code = error.code;
+                            var error_message = error.message;
 
-              window.alert(error_code);
-            });
+                            window.alert(error_code);
+                        });
+                })
+                .catch(error => {
+                    var error_code = error.code;
+                    var error_message = error.message;
+
+                    window.alert(error_code);
+                });
+
+
         })
-        .catch(error => {
-          var error_code = error.code;
-          var error_message = error.message;
+        .catch(function(error) {
+            var error_code = error.code;
+            var error_message = error.message;
 
-          window.alert(error_code);
+            window.alert(error_code);
         });
-
-
-    })
-    .catch(function (error) {
-      var error_code = error.code;
-      var error_message = error.message;
-
-      window.alert(error_code);
-    });
 }
 
 
 function login() {
-  email = document.getElementById('email_field').value;
-  password = document.getElementById('password_field').value;
+    email = document.getElementById('email_field').value;
+    password = document.getElementById('password_field').value;
 
-  if (validateInput(email) == false || validateInput(password) == false) {
-    window.alert("Please fillout everything");
-  }
+    if (validateInput(email) == false || validateInput(password) == false) {
+        window.alert("Please fillout everything");
+    }
 
-  auth.signInWithEmailAndPassword(email, password)
-    .then(function () {
-      var user = auth.currentUser;
+    auth.signInWithEmailAndPassword(email, password)
+        .then(function() {
+            var user = auth.currentUser;
 
-      window.alert("up here");
-      isLoggingIn = true;
-      var adminDocRef = database.collection("users").doc(user.uid);
-      window.alert("middle here");
-      adminDocRef.get().then((doc) => {
-        window.alert("inside here");
-        if (doc.exists) {
-          window.alert("Userrole: " + doc.data().userRole);
-          var userRole = doc.data().userRole
-          if (userRole == 0) {
-            //go to super admin
-            window.alert("Welcome Super Admin!");
-            window.location.assign("home.html");
-            setIsSuperAdmin(true);
-            loggedSuperAdmin = user;
-          } else if (userRole == 1) {
-            //go to admin
-            window.alert("Welcome Admin!");
-            setIsSuperAdmin(false);
-            window.location.assign("home.html"); s
-          } else {
-            //invalid access to other users with other codes
-            window.alert("There is no admin with such credentials");
-          }
+            window.alert("up here");
+            isLoggingIn = true;
+            var adminDocRef = database.collection("users").doc(user.uid);
+            window.alert("middle here");
+            adminDocRef.get().then((doc) => {
+                window.alert("inside here");
+                if (doc.exists) {
+                    window.alert("Userrole: " + doc.data().userRole);
+                    var userRole = doc.data().userRole
+                    if (userRole == 0) {
+                        //go to super admin
+                        window.alert("Welcome Super Admin!");
+                        window.location.assign("home.html");
+                        setIsSuperAdmin(true);
+                        loggedSuperAdmin = user;
+                    } else if (userRole == 1) {
+                        //go to admin
+                        window.alert("Welcome Admin!");
+                        setIsSuperAdmin(false);
+                        window.location.assign("home.html");
+                        s
+                    } else {
+                        //invalid access to other users with other codes
+                        window.alert("There is no admin with such credentials");
+                    }
 
-        } else {
-          window.alert("No such document!");
-          //console.log("No such document!");
-        }
-      }).catch((error) => {
-        console.log("Error getting document:", error);
-      });
+                } else {
+                    window.alert("No such document!");
+                    //console.log("No such document!");
+                }
+            }).catch((error) => {
+                console.log("Error getting document:", error);
+            });
 
-      window.alert("bottom here");
-    })
-    .catch(function (error) {
-      var error_code = error.code;
-      var error_message = error.message;
+            window.alert("bottom here");
+        })
+        .catch(function(error) {
+            var error_code = error.code;
+            var error_message = error.message;
 
-      if (error_code == "auth/invalid-email") {
-        window.alert("Invalid Email");
-      } else if (error_code == "auth/wrong-password") {
-        window.alert("Incorrect Password");
-      } else if (error_code == "auth/user-not-found") {
-        window.alert("There is no user with such credentials");
-      }
+            if (error_code == "auth/invalid-email") {
+                window.alert("Invalid Email");
+            } else if (error_code == "auth/wrong-password") {
+                window.alert("Incorrect Password");
+            } else if (error_code == "auth/user-not-found") {
+                window.alert("There is no user with such credentials");
+            }
 
-    });
+        });
 }
 
 function logout() {
-  auth.signOut().then(() => {
-    setIsSuperAdmin(false);
-    removeIsSuperAdmin();
-    window.location.replace("index.html");
-  });
+    auth.signOut().then(() => {
+        setIsSuperAdmin(false);
+        removeIsSuperAdmin();
+        window.location.replace("index.html");
+    });
 }
 
 function sendEmailVerification() {
-  // code for send email verification to newly created email of landlord
-  auth.currentUser.sendEmailVerification()
-    .then(() => {
-      window.alert("Verification has been sent to email: " + user.email);
-    })
-    .catch(error => {
+    // code for send email verification to newly created email of landlord
+    auth.currentUser.sendEmailVerification()
+        .then(() => {
+            window.alert("Verification has been sent to email: " + user.email);
+        })
+        .catch(error => {
 
-    });
+        });
 }
 
 
 function validateEmail(email) {
-  var validRegex = /^[^@]+@\w+(\.\w+)+\w$/;
-  if (validRegex.test(email)) {
-    return true;
-  } else {
-    return false;
-  }
+    var validRegex = /^[^@]+@\w+(\.\w+)+\w$/;
+    if (validRegex.test(email)) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 function validatePassword(password) {
-  if (password.length < 6) {
-    return false;
-  } else {
-    return true;
-  }
+    if (password.length < 6) {
+        return false;
+    } else {
+        return true;
+    }
 }
 
 function validateInput(input) {
-  if (input == null) {
-    return false;
-  }
+    if (input == null) {
+        return false;
+    }
 
-  if (input.length <= 0) {
-    return false;
-  } else {
-    return true;
-  }
+    if (input.length <= 0) {
+        return false;
+    } else {
+        return true;
+    }
 }
 
-auth.onAuthStateChanged(function (user) {
-  if (user != null) {
-    if (isLoggingIn == false) {
-      if (window.location.pathname == "index.html") {
-        //window.location.replace("/public/home.html");
-        window.history.back();
-      }
+auth.onAuthStateChanged(function(user) {
+    if (user != null) {
+        if (isLoggingIn == false) {
+            if (window.location.pathname == "/public/index.html") {
+                //window.location.replace("/public/home.html");
+                window.history.back();
+            }
+            if (window.location.pathname == "/index.html") {
+                window.history.back();
+            }
+        } else {
+            window.alert("logging in");
+        }
     } else {
-      window.alert("logging in");
+        // if (window.location.pathname != "/index.html") {
+        //     window.location.replace("/index.html");
+        // }
+        if (window.location.pathname != "/public/index.html") {
+            window.location.replace("/public/index.html");
+        }
     }
-  } else {
-    if (window.location.pathname != "/index.html") {
-      window.location.replace("/index.html");
-    }
-  }
 });
 
 function setIsSuperAdmin(isSuperAdmin) {
-  window.alert("setting Super Admin " + isSuperAdmin);
-  sessionStorage.setItem("isSuperAdmin", isSuperAdmin);
+    window.alert("setting Super Admin " + isSuperAdmin);
+    sessionStorage.setItem("isSuperAdmin", isSuperAdmin);
 }
 
 function getIsSuperAdmin() {
-  return sessionStorage.getItem("isSuperAdmin");
+    return sessionStorage.getItem("isSuperAdmin");
 }
 
 function removeIsSuperAdmin() {
-  sessionStorage.removeItem("isSuperAdmin");
+    sessionStorage.removeItem("isSuperAdmin");
 }
 
 
@@ -220,28 +227,27 @@ function removeIsSuperAdmin() {
 //for testing==================
 
 function isUserLoggedIn() {
-  var user = auth.currentUser;
-  if (user != null) {
-    window.alert("user is not null :" + user.uid);
-  } else {
-    window.alert("user is null");
-  }
+    var user = auth.currentUser;
+    if (user != null) {
+        window.alert("user is not null :" + user.uid);
+    } else {
+        window.alert("user is null");
+    }
 }
 
 function whoIsUser() {
-  var user = auth.currentUser;
-  if (user == null) {
-    window.alert("user is: null " + loggedSuperAdmin);
-  } else {
-    window.alert("user is: " + user.uid);
-  }
+    var user = auth.currentUser;
+    if (user == null) {
+        window.alert("user is: null " + loggedSuperAdmin);
+    } else {
+        window.alert("user is: " + user.uid);
+    }
 }
 
 function isAuth1EqualsAuth2() {
-  if (auth == secondAppAuth) {
-    window.alert("same auth");
-  } else {
-    window.alert("not same auth");
-  }
+    if (auth == secondAppAuth) {
+        window.alert("same auth");
+    } else {
+        window.alert("not same auth");
+    }
 }
-

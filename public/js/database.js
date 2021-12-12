@@ -9,17 +9,6 @@ function isDatabaseNull() {
 //for saving data of newly created admin to firestore
 function saveUserDataToDatabase(newAdmin) {
 
-    // if (newAdmin === null) {
-    //     window.alert("newAdmin null");
-    // } else {
-    //     window.alert(newAdmin.adminID);
-    //     window.alert(newAdmin.firstName);
-    //     window.alert(newAdmin.lastName);
-    //     window.alert(newAdmin.email);
-    //     window.alert(newAdmin.password);
-    //     window.alert(newAdmin.userRole);
-    // }
-
     //extract data for user object
     var userID = newAdmin.adminID;
     var email = newAdmin.email;
@@ -32,27 +21,83 @@ function saveUserDataToDatabase(newAdmin) {
 
     userDocRef.withConverter(userConverter)
         .set(userObj)
-        .then(function () {
+        .then(function() {
             adminDocRef.withConverter(adminConverter)
                 .set(newAdmin)
-                .then(function () {
+                .then(function() {
                     window.alert("New Admin has been created!");
                     window.location.reload();
                 })
-                .catch(function (error) {
+                .catch(function(error) {
                     var error_code = error.code;
                     var error_message = error.message;
-        
+
                     window.alert(error_code);
                 });
         })
-        .catch(function (error) {
+        .catch(function(error) {
             var error_code = error.code;
             var error_message = error.message;
 
             window.alert(error_code);
         });
 
+}
+
+//getting data from firebase
+
+function fetchListOfAdminToDatabase() {
+    var admins = [];
+
+    var adminCollectionRef = database.collection("admins");
+
+    adminCollectionRef.withConverter(adminConverter)
+        .get().then((querySnapshot) => {
+            if (querySnapshot) {
+                querySnapshot.forEach((doc) => {
+                    // doc.data() is never undefined for query doc snapshots
+                    var adminObj = doc.data();
+                    admins.push(adminObj);
+                });
+                renderAllAdminsToTable(admins);
+            } else {
+                console.log("No such document!");
+            }
+
+        })
+        .catch(function(error) {
+            var error_code = error.code;
+            var error_message = error.message;
+
+            window.alert(error_code);
+        });
+}
+
+var tbody = document.getElementById('property-list-body');
+
+function renderAdminToTable(firstName, lastName, email) {
+
+    let trow = document.createElement("tr");
+    let td1 = document.createElement('td');
+    let td2 = document.createElement('td');
+    let td3 = document.createElement('td');
+
+    td1.innerHTML = firstName;
+    td2.innerHTML = lastName;
+    td3.innerHTML = email;
+
+    trow.appendChild(td1);
+    trow.appendChild(td2);
+    trow.appendChild(td3);
+
+    tbody.append(trow);
+}
+
+function renderAllAdminsToTable(admins) {
+    tbody.innerHTML = "";
+    admins.forEach(admin => {
+        renderAdminToTable(admin.firstName, admin.lastName, admin.email);
+    })
 }
 
 // ============= custom javascript objects and converters =====================//
@@ -67,7 +112,7 @@ class User {
 }
 
 const userConverter = {
-    toFirestore: function (user) {
+    toFirestore: function(user) {
         return {
             userID: user.userID,
             email: user.email,
@@ -75,7 +120,7 @@ const userConverter = {
             userRole: user.userRole
         };
     },
-    fromFirestore: function (snapshot, options) {
+    fromFirestore: function(snapshot, options) {
         const data = snapshot.data(options);
         return new User(data.userID, data.email, data.password, data.userRole);
     }
@@ -94,7 +139,7 @@ class Admin {
 
 
 const adminConverter = {
-    toFirestore: function (admin) {
+    toFirestore: function(admin) {
         return {
             adminID: admin.adminID,
             firstName: admin.firstName,
@@ -104,7 +149,7 @@ const adminConverter = {
             userRole: admin.userRole
         };
     },
-    fromFirestore: function (snapshot, options) {
+    fromFirestore: function(snapshot, options) {
         const data = snapshot.data(options);
         return new Admin(data.adminID, data.firstName, data.lastName, data.email, data.pasword, data.userRole);
     }

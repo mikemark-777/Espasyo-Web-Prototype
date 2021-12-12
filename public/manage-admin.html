@@ -3,7 +3,7 @@
 
 <head>
     <title>Manage Admin</title>
-    <link rel="shortcut icon" type="image/jpg" href="./images/espasyo_favicon.ico"/>
+    <link rel="shortcut icon" type="image/jpg" href="./images/espasyo_favicon.ico" />
     <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -32,7 +32,7 @@
     <div class="main-container">
         <div class="create-new-admin-container">
             <div class="form-container">
-            <h5 class="create-new-admin-text"><b>Create New Admin</b></h5><br />
+                <h5 class="create-new-admin-text"><b>Create New Admin</b></h5><br />
                 <input type="text" id="firstNameInput" class="signUpInputs" placeholder="First name" required><br>
                 <input type="text" id="lastNameInput" class="signUpInputs" placeholder="Last name" required><br>
                 <input type="email" id="emailInput" class="signUpInputs" placeholder="Email" required><br>
@@ -40,72 +40,30 @@
                 <button class="btn-add-new-admin" onclick="signUp()">Create</button>
             </div>
         </div>
-    
-    
-    
+
+
+
         <!-- <button class="btnLogin" onclick="whoIsUser()">Who is user?</button><br>
         <button class="btnLogin" onclick="isAuth1EqualsAuth2()">Same auth?</button> -->
-    
+
         <div class="list-of-landlord-container">
-            <div class="div1">
-                <table class="info">
-                    <thead>
-                        <tr>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Email</th>
-                            <th>Password</th>
-                            <th>Action</th>
-                        </tr>
+            <div class="container mt-3">
+                <table class="table table-bordered">
+                    <!-- table-dark-->
+                    <thead class="thead-dark">
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Action</th>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>Kyra</td>
-                            <td>Vergara</td>
-                            <td>kjdv13@gmail.com</td>
-                            <td>test123!</td>
-                            <td><button>Edit</button></td>
-                        </tr>
-        
-                        <tr>
-                            <td>Mike</td>
-                            <td>Vinoya</td>
-                            <td>mike@gmail.com</td>
-                            <td>admin777</td>
-                            <td><button>Edit</button></td>
-        
-                        </tr>
-                        <tr>
-                            <td>Ivee</td>
-                            <td>Viloria</td>
-                            <td>Ivee@gmail.com</td>
-                            <td>piit27</td>
-                            <td><button>Edit</button></td>
-        
-                        </tr>
-                        <tr>
-                            <td>Kyzyll</td>
-                            <td>Ugot</td>
-                            <td>kyzyll@gmail.com</td>
-                            <td>genshin123</td>
-                            <td><button>Edit</button></td>
-        
-                        </tr>
-                        <tr>
-                            <td>Danica</td>
-                            <td>Castillo</td>
-                            <td>danica@gmail.com</td>
-                            <td>danicaaaa</td>
-                            <td><button>Edit</button></td>
-        
-                        </tr>
-                    </tbody>
+                    <tbody id="property-list-body"></tbody>
                 </table>
+
             </div>
         </div>
-    
+
     </div>
-    
+
 
     <!-- core firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
@@ -117,8 +75,8 @@
     <script src="./js/database.js"></script>
 
     <script>
-
-        window.onload = function () {
+        window.onload = function() {
+            fetchListOfAdminToDatabase();
             if (getIsSuperAdmin() == "false") {
                 document.getElementById("btn-manage-admin").style.display = "none";
             }
