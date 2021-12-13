@@ -81,16 +81,25 @@ function renderAdminToTable(firstName, lastName, email) {
     let td1 = document.createElement('td');
     let td2 = document.createElement('td');
     let td3 = document.createElement('td');
+    let editButton = document.createElement("button");
+
 
     td1.innerHTML = firstName;
     td2.innerHTML = lastName;
     td3.innerHTML = email;
+    editButton.innerHTML = "Edit";
+
+    editButton.onclick = function() {
+        window.alert(email);
+    }
+
 
     trow.appendChild(td1);
     trow.appendChild(td2);
     trow.appendChild(td3);
-
+    trow.appendChild(editButton);
     tbody.append(trow);
+
 }
 
 function renderAllAdminsToTable(admins) {

@@ -29,6 +29,7 @@
         </ul>
     </nav>
 
+
     <div class="main-container">
         <div class="create-new-admin-container">
             <div class="form-container">
@@ -48,7 +49,7 @@
 
         <div class="list-of-landlord-container">
             <div class="container mt-3">
-                <table class="table table-bordered">
+                <table id="table-of-admins" class="table table-bordered">
                     <!-- table-dark-->
                     <thead class="thead-dark">
                         <th>First Name</th>
@@ -58,10 +59,8 @@
                     </thead>
                     <tbody id="property-list-body"></tbody>
                 </table>
-
             </div>
         </div>
-
     </div>
 
 
@@ -73,6 +72,7 @@
     <script src="./js/firebaseConfig.js"></script>
     <script src="./js/authentication.js"></script>
     <script src="./js/database.js"></script>
+    <script src="./js/modal.js"></script>
 
     <script>
         window.onload = function() {

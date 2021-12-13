@@ -44,7 +44,6 @@ function signUp() {
             //this will send an email verification to the email of the admin and then logout it here
             secondAppAuth.currentUser.sendEmailVerification()
                 .then(() => {
-                    window.alert("An email verification has been sent to " + email + ". Please check the email and click the link to complete setting up the admin account. \n\nThank you");
                     secondAppAuth.signOut().then(() => {
                             //for reload of admin list
                             window.location.reload();
@@ -69,8 +68,12 @@ function signUp() {
             var error_code = error.code;
             var error_message = error.message;
 
-            window.alert(error_code);
+            if (error_code == "auth/email-already-in-use") {
+                window.alert("Email already exists");
+            }
+
         });
+
 }
 
 
@@ -85,13 +88,10 @@ function login() {
     auth.signInWithEmailAndPassword(email, password)
         .then(function() {
             var user = auth.currentUser;
-
-            window.alert("up here");
+            window.alert("UserID: " + user.uid);
             isLoggingIn = true;
             var adminDocRef = database.collection("users").doc(user.uid);
-            window.alert("middle here");
             adminDocRef.get().then((doc) => {
-                window.alert("inside here");
                 if (doc.exists) {
                     window.alert("Userrole: " + doc.data().userRole);
                     var userRole = doc.data().userRole
@@ -193,9 +193,9 @@ auth.onAuthStateChanged(function(user) {
                 //window.location.replace("/public/home.html");
                 window.history.back();
             }
-            if (window.location.pathname == "/index.html") {
-                window.history.back();
-            }
+            // if (window.location.pathname == "/index.html") {
+            //     window.history.back();
+            // }
         } else {
             window.alert("logging in");
         }
