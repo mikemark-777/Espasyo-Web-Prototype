@@ -191,7 +191,12 @@ auth.onAuthStateChanged(function(user) {
         if (isLoggingIn == false) {
             if (window.location.pathname == "/public/index.html") {
                 //window.location.replace("/public/home.html");
-                window.history.back();
+                if (user != null) {
+                    window.location.replace("/public/home.html");
+                } else {
+                    window.history.back();
+                }
+
             }
             // if (window.location.pathname == "/index.html") {
             //     window.history.back();
