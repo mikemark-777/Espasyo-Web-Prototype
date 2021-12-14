@@ -219,8 +219,10 @@ button:hover {
     float: left;
 }
 
-.create-new-admin-container {
-    /* background-color: cornflowerblue; */
+.create-new-admin-container {}
+
+#property-list-body {
+    height: min-content;
 }
 
 .list-of-landlord-container {
@@ -230,6 +232,7 @@ button:hover {
 
 #table-of-admins {
     width: 100%;
+    height: min-content;
 }
 
 .form-container .create-new-admin-text {
@@ -237,58 +240,56 @@ button:hover {
 }
 
 
-/* MODAL */
+/* for button of each admin list */
 
-
-/* The Modal (background) */
-
-.modal {
-    display: none;
-    /* Hidden by default */
-    position: fixed;
-    /* Stay in place */
-    z-index: 1;
-    /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%;
-    /* Full width */
-    height: 100%;
-    /* Full height */
-    overflow: auto;
-    /* Enable scroll if needed */
-    background-color: rgb(0, 0, 0);
-    /* Fallback color */
-    background-color: rgba(0, 0, 0, 0.4);
-    /* Black w/ opacity */
-}
-
-
-/* Modal Content/Box */
-
-.modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    /* 15% from the top and centered */
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    /* Could be more or less, depending on screen size */
-}
-
-
-/* The Close Button */
-
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
+.btnEditAdmin {
+    background-color: #3add19;
+    font-size: 12px;
+    padding: 5px 18px;
+    border-radius: 4px;
     color: black;
-    text-decoration: none;
+    margin: 4px;
+    width: 60px;
+    border: none;
+}
+
+.btnEditAdmin:hover {
+    background: #fff;
+    color: black;
+    border: 1px solid #126d00;
     cursor: pointer;
+}
+
+.btnDeleteAdmin {
+    background-color: #dd3619;
+    font-size: 12px;
+    padding: 5px 5px;
+    border-radius: 4px;
+    color: white;
+    margin: 4px;
+    width: 60px;
+    border: none;
+}
+
+.btnDeleteAdmin:hover {
+    background: #fff;
+    color: black;
+    border: 1px solid #dd3619;
+    cursor: pointer;
+}
+
+
+/* for the admin password input and eyelash */
+
+.passwordBox {
+    font-size: medium;
+    padding: 2px;
+    width: 100px;
+}
+
+#togglePassword {
+    font-size: smaller;
+    width: 50px;
+    cursor: pointer;
+    margin-left: 10px;
 }

@@ -27,55 +27,72 @@ function signUp() {
         return;
     }
 
-    //confirm if email is existing
-    var isEmailConfirmed = confirmEmail(email);
-    if (isEmailConfirmed === true) {
-        //creates user with email and password using the secondaryAppAuth
-        secondAppAuth.createUserWithEmailAndPassword(email, password)
-            .then(function() {
-                var newAdmin = secondAppAuth.currentUser;
-                var newAdminID = newAdmin.uid;
+    //will check first if the email provided already exists
+    secondAppAuth.fetchSignInMethodsForEmail(email)
+        .then(function(signInMethods) {
+            if (signInMethods.length < 1) {
+                confirm
+                //if email is existing
+                var isEmailConfirmed = confirmEmail(email);
+                if (isEmailConfirmed === true) {
+                    //creates user with email and password using the secondaryAppAuth
+                    secondAppAuth.createUserWithEmailAndPassword(email, password)
+                        .then(function() {
+                            var newAdmin = secondAppAuth.currentUser;
+                            var newAdminID = newAdmin.uid;
 
-                //create a new admin object and will save the user to the firestore database
-                const adminObj = new Admin(newAdminID, firstName, lastName, email, password, 1);
-                saveUserDataToDatabase(adminObj);
+                            //create a new admin object and will save the user to the firestore database
+                            const adminObj = new Admin(newAdminID, firstName, lastName, email, password, 1);
+                            saveUserDataToDatabase(adminObj);
 
-                //this will send an email verification to the email of the admin and then logout it here
-                secondAppAuth.currentUser.sendEmailVerification()
-                    .then(() => {
-                        secondAppAuth.signOut().then(() => {
-                                window.alert("An email verification has been sent to " + email + ". Please check your email and click the link provided to complete setting up the admin account.\n\nThank you!");
-                                //for reload of admin list
-                                window.location.reload();
-                            })
-                            .catch(error => {
-                                var error_code = error.code;
-                                var error_message = error.message;
+                            //this will send an email verification to the email of the admin and then logout it here
+                            secondAppAuth.currentUser.sendEmailVerification()
+                                .then(() => {
+                                    secondAppAuth.signOut().then(() => {
+                                            window.alert("An email verification has been sent to " + email + ". Please check your email and click the link provided to complete setting up the admin account.\n\nThank you!");
+                                            //for reload of admin list
+                                            window.location.reload();
+                                        })
+                                        .catch(error => {
+                                            var error_code = error.code;
+                                            var error_message = error.message;
 
-                                window.alert(error_code);
-                            });
-                    })
-                    .catch(error => {
-                        var error_code = error.code;
-                        var error_message = error.message;
+                                            window.alert(error_code);
+                                        });
+                                })
+                                .catch(error => {
+                                    var error_code = error.code;
+                                    var error_message = error.message;
 
-                        window.alert(error_code);
-                    });
+                                    window.alert(error_code);
+                                });
 
 
-            })
-            .catch(function(error) {
-                var error_code = error.code;
-                var error_message = error.message;
+                        })
+                        .catch(function(error) {
+                            var error_code = error.code;
+                            var error_message = error.message;
 
-                if (error_code == "auth/email-already-in-use") {
-                    window.alert("Email already exists");
+                            if (error_code == "auth/email-already-in-use") {
+                                window.alert("Email already exists");
+                            }
+                        });
+                } else {
+                    window.alert("email has been denied");
                 }
+            } else {
+                window.alert("Email already exists");
+            }
+        })
+        .catch(function(error) {
+            var error_code = error.code;
+            var error_message = error.message;
 
-            });
-    } else {
-        window.alert("email has been denied");
-    }
+            if (error_code == "auth/email-already-in-use") {
+                window.alert("Email already exists");
+            }
+        });
+
 
 }
 
@@ -96,7 +113,6 @@ function login() {
             var adminDocRef = database.collection("users").doc(user.uid);
             adminDocRef.get().then((doc) => {
                 if (doc.exists) {
-                    window.alert("Userrole: " + doc.data().userRole);
                     var userRole = doc.data().userRole
                     if (userRole == 0) {
                         //go to super admin
@@ -106,10 +122,15 @@ function login() {
                         loggedSuperAdmin = user;
                     } else if (userRole == 1) {
                         //go to admin
-                        window.alert("Welcome Admin!");
-                        setIsSuperAdmin(false);
-                        window.location.assign("home.html");
-                        s
+                        if (user.emailVerified === true) {
+                            window.alert("Welcome Admin!");
+                            setIsSuperAdmin(false);
+                            window.location.assign("home.html");
+                        } else {
+                            window.alert("Your email is not yet verified. We have sent an email verification to " + email + " Please check your email and click the link provided to complete setting up your account\n\nThank you");
+                            logout();
+                        }
+
                     } else {
                         //invalid access to other users with other codes
                         window.alert("There is no admin with such credentials");

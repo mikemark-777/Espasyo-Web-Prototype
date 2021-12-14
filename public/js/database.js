@@ -1,11 +1,3 @@
-function isDatabaseNull() {
-    if (database != null) {
-        window.alert("Database Not Null");
-    } else {
-        window.alert("Database Null");
-    }
-}
-
 //for saving data of newly created admin to firestore
 function saveUserDataToDatabase(newAdmin) {
 
@@ -75,29 +67,70 @@ function fetchListOfAdminToDatabase() {
 
 var tbody = document.getElementById('property-list-body');
 
-function renderAdminToTable(firstName, lastName, email) {
+function renderAdminToTable(firstName, lastName, email, password) {
 
     let trow = document.createElement("tr");
     let td1 = document.createElement('td');
     let td2 = document.createElement('td');
     let td3 = document.createElement('td');
-    let editButton = document.createElement("button");
+    let td4 = document.createElement('td');
+    let passwordBox = document.createElement('input');
+    let eyelash = document.createElement('i');
+    let td5 = document.createElement('td');
+    let btnEditAdmin = document.createElement("button");
+    let btnDeleteAdmin = document.createElement("button");
 
 
     td1.innerHTML = firstName;
     td2.innerHTML = lastName;
     td3.innerHTML = email;
-    editButton.innerHTML = "Edit";
+    //configure passwordbox which will contain the password
+    passwordBox.type = "password";
+    passwordBox.value = password;
+    passwordBox.disabled = true;
+    passwordBox.className += "passwordBox";
+    eyelash.className += "bi-eye-slash";
+    eyelash.id = "togglePassword";
+    eyelash.innerHTML = "show";
+    td4.appendChild(passwordBox);
+    td4.appendChild(eyelash);
 
-    editButton.onclick = function() {
-        window.alert(email);
+
+    //configure the buttons for managing admin accounts
+    btnEditAdmin.innerHTML = "Edit";
+    btnDeleteAdmin.innerHTML = "Delete"
+    btnEditAdmin.className += "btnEditAdmin";
+    btnDeleteAdmin.className += "btnDeleteAdmin";
+    td5.appendChild(btnEditAdmin);
+    td5.appendChild(btnDeleteAdmin);
+
+    eyelash.onclick = function() {
+        // toggle the type attribute
+        const type = passwordBox.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordBox.setAttribute('type', type);
+        // toggle the eye / eye slash icon
+        if (eyelash.innerText == "show") {
+            eyelash.innerHTML = "hide";
+        } else {
+            eyelash.innerHTML = "show";
+        }
+
+    }
+
+    btnEditAdmin.onclick = function() {
+        window.alert("Edit this admin account? " + email);
+    }
+
+    btnDeleteAdmin.onclick = function() {
+        window.alert("Delete this admin account? " + email);
     }
 
 
     trow.appendChild(td1);
     trow.appendChild(td2);
     trow.appendChild(td3);
-    trow.appendChild(editButton);
+    trow.appendChild(td4);
+    trow.appendChild(td5);
     tbody.append(trow);
 
 }
@@ -105,7 +138,7 @@ function renderAdminToTable(firstName, lastName, email) {
 function renderAllAdminsToTable(admins) {
     tbody.innerHTML = "";
     admins.forEach(admin => {
-        renderAdminToTable(admin.firstName, admin.lastName, admin.email);
+        renderAdminToTable(admin.firstName, admin.lastName, admin.email, admin.password);
     })
 }
 
@@ -160,6 +193,6 @@ const adminConverter = {
     },
     fromFirestore: function(snapshot, options) {
         const data = snapshot.data(options);
-        return new Admin(data.adminID, data.firstName, data.lastName, data.email, data.pasword, data.userRole);
+        return new Admin(data.adminID, data.firstName, data.lastName, data.email, data.password, data.userRole);
     }
 }
