@@ -27,52 +27,55 @@ function signUp() {
         return;
     }
 
-    email
+    //confirm if email is existing
+    var isEmailConfirmed = confirmEmail(email);
+    if (isEmailConfirmed === true) {
+        //creates user with email and password using the secondaryAppAuth
+        secondAppAuth.createUserWithEmailAndPassword(email, password)
+            .then(function() {
+                var newAdmin = secondAppAuth.currentUser;
+                var newAdminID = newAdmin.uid;
 
-    //creates user with email and password using the secondaryAppAuth
-    secondAppAuth.createUserWithEmailAndPassword(email, password)
-        .then(function() {
-            var newAdmin = secondAppAuth.currentUser;
-            var newAdminID = newAdmin.uid;
+                //create a new admin object and will save the user to the firestore database
+                const adminObj = new Admin(newAdminID, firstName, lastName, email, password, 1);
+                saveUserDataToDatabase(adminObj);
 
-            //create a new admin object
-            const adminObj = new Admin(newAdminID, firstName, lastName, email, password, 1);
+                //this will send an email verification to the email of the admin and then logout it here
+                secondAppAuth.currentUser.sendEmailVerification()
+                    .then(() => {
+                        secondAppAuth.signOut().then(() => {
+                                window.alert("An email verification has been sent to " + email + ". Please check your email and click the link provided to complete setting up the admin account.\n\nThank you!");
+                                //for reload of admin list
+                                window.location.reload();
+                            })
+                            .catch(error => {
+                                var error_code = error.code;
+                                var error_message = error.message;
 
-            //this will save the user to the firestore database
-            saveUserDataToDatabase(adminObj);
+                                window.alert(error_code);
+                            });
+                    })
+                    .catch(error => {
+                        var error_code = error.code;
+                        var error_message = error.message;
 
-            //this will send an email verification to the email of the admin and then logout it here
-            secondAppAuth.currentUser.sendEmailVerification()
-                .then(() => {
-                    secondAppAuth.signOut().then(() => {
-                            //for reload of admin list
-                            window.location.reload();
-                        })
-                        .catch(error => {
-                            var error_code = error.code;
-                            var error_message = error.message;
-
-                            window.alert(error_code);
-                        });
-                })
-                .catch(error => {
-                    var error_code = error.code;
-                    var error_message = error.message;
-
-                    window.alert(error_code);
-                });
+                        window.alert(error_code);
+                    });
 
 
-        })
-        .catch(function(error) {
-            var error_code = error.code;
-            var error_message = error.message;
+            })
+            .catch(function(error) {
+                var error_code = error.code;
+                var error_message = error.message;
 
-            if (error_code == "auth/email-already-in-use") {
-                window.alert("Email already exists");
-            }
+                if (error_code == "auth/email-already-in-use") {
+                    window.alert("Email already exists");
+                }
 
-        });
+            });
+    } else {
+        window.alert("email has been denied");
+    }
 
 }
 
@@ -88,7 +91,7 @@ function login() {
     auth.signInWithEmailAndPassword(email, password)
         .then(function() {
             var user = auth.currentUser;
-            window.alert("UserID: " + user.uid);
+            window.alert("UserID: " + user.emailVerified);
             isLoggingIn = true;
             var adminDocRef = database.collection("users").doc(user.uid);
             adminDocRef.get().then((doc) => {
@@ -119,8 +122,7 @@ function login() {
             }).catch((error) => {
                 console.log("Error getting document:", error);
             });
-
-            window.alert("bottom here");
+            s
         })
         .catch(function(error) {
             var error_code = error.code;
@@ -156,6 +158,10 @@ function sendEmailVerification() {
         });
 }
 
+function confirmEmail(email) {
+    var answer = window.confirm("We will send an email verification to the email you have provided. Make sure that the email is existing.\n\nAre you sure you will use the email " + email + " for this new admin account?");
+    return answer;
+}
 
 function validateEmail(email) {
     var validRegex = /^[^@]+@\w+(\.\w+)+\w$/;
@@ -230,6 +236,7 @@ function removeIsSuperAdmin() {
 
 
 //for testing==================
+
 
 function isUserLoggedIn() {
     var user = auth.currentUser;
