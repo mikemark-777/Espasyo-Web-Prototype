@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" id="pop">
 
 <head>
     <title>Manage Admin</title>
@@ -32,12 +32,19 @@
     <div class="popup">
         <div class="close-btn" onclick="hideEditPopup()">&times;</div>
         <div class="edit-admin-container">
-            <h4>Edit Admin</h4>
+            <h4 class="edit-text">Edit Admin</h4>
+            <h6>First Name</h6>
             <input type="text" id="firstNameEdit" class="editInputs" placeholder="First name" required><br>
+            <h6>Last Name</h6>
             <input type="text" id="lastNameEdit" class="editInputs" placeholder="Last name" required><br>
+            <h6>Email</h6>
             <input type="email" id="emailEdit" class="editInputs" placeholder="Email" required><br>
+            <h6>Password</h6>
             <input type="password" id="passwordEdit" class="editInputs" placeholder="Password" required><br>
-            <button class="btn-edit-new-admin" onclick="signUp()">Create</button>
+            <div class="btns-edit">
+                <button class="btn-cancel-edit-admin" onclick="">Cancel</button>
+                <button class="btn-save-edit-admin" onclick="">Save</button>
+            </div>
         </div>
     </div>
 
@@ -53,11 +60,6 @@
                 <button class="btn-add-new-admin" onclick="signUp()">Create</button>
             </div>
         </div>
-
-
-
-        <!-- <button class="btnLogin" onclick="whoIsUser()">Who is user?</button><br>
-        <button class="btnLogin" onclick="isAuth1EqualsAuth2()">Same auth?</button> -->
 
         <div class="list-of-landlord-container">
             <div class="container mt-3">

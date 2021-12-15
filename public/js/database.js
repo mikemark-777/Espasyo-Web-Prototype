@@ -67,7 +67,7 @@ function fetchListOfAdminToDatabase() {
 
 var tbody = document.getElementById('property-list-body');
 
-function renderAdminToTable(firstName, lastName, email, password) {
+function renderAdminToTable(adminID, firstName, lastName, email, password) {
 
     let trow = document.createElement("tr");
     let td1 = document.createElement('td');
@@ -118,7 +118,7 @@ function renderAdminToTable(firstName, lastName, email, password) {
     }
 
     btnEditAdmin.onclick = function() {
-        showEditPopup(firstName, lastName, email, password);
+        showEditPopup(adminID, firstName, lastName, email, password);
     }
 
     btnDeleteAdmin.onclick = function() {
@@ -138,7 +138,7 @@ function renderAdminToTable(firstName, lastName, email, password) {
 function renderAllAdminsToTable(admins) {
     tbody.innerHTML = "";
     admins.forEach(admin => {
-        renderAdminToTable(admin.firstName, admin.lastName, admin.email, admin.password);
+        renderAdminToTable(admin.adminID, admin.firstName, admin.lastName, admin.email, admin.password);
     })
 }
 
@@ -197,7 +197,7 @@ const adminConverter = {
     }
 }
 
-function showEditPopup(firstName, lastName, email, password) {
+function showEditPopup(adminID, firstName, lastName, email, password) {
     firstNameTextboxEdit = document.getElementById('firstNameEdit');
     lastNameTextboxEdit = document.getElementById('lastNameEdit');
     emailTextboxEdit = document.getElementById('emailEdit');
@@ -208,8 +208,18 @@ function showEditPopup(firstName, lastName, email, password) {
     lastNameTextboxEdit.value = lastName;
     emailTextboxEdit.value = email;
     passwordTextboxEdit.value = password;
+
+
 }
 
 function hideEditPopup() {
     document.querySelector(".popup").classList.remove("active");
+}
+
+function isChangeMadeIn(firstName, lastName, email, password) {
+
+}
+
+function editAdmin() {
+
 }
