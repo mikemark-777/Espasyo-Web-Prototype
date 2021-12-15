@@ -4,25 +4,43 @@ var isLoggingIn = false;
 
 function signUp() {
     //get all input from user
-    var firstName = document.getElementById('firstNameInput').value;
-    var lastName = document.getElementById('lastNameInput').value;
-    var email = document.getElementById('emailInput').value;
-    var password = document.getElementById('passwordInput').value;
+
+    firstNameTextbox = document.getElementById('firstNameInput');
+    lastNameTextbox = document.getElementById('lastNameInput');
+    emailTextbox = document.getElementById('emailInput');
+    passwordTextbox = document.getElementById('passwordInput');
+
+    var firstName = firstNameTextbox.value;
+    var lastName = lastNameTextbox.value;
+    var email = emailTextbox.value;
+    var password = passwordTextbox.value;
+
+    firstNameTextbox.style.border = '1px solid #777';
+    lastNameTextbox.style.border = '1px solid #777';
+    emailTextbox.style.border = '1px solid #777';
+    passwordTextbox.style.border = '1px solid #777';
 
     //check if inputs are empty
     if (validateInput(firstName) == false || validateInput(lastName) == false || validateInput(email) == false || validateInput(password) == false) {
+        firstNameTextbox.style.border = '1px solid rgb(235, 72, 72)';
+        lastNameTextbox.style.border = '1px solid rgb(235, 72, 72)';
+        emailTextbox.style.border = '1px solid rgb(235, 72, 72)';
+        passwordTextbox.style.border = '1px solid rgb(235, 72, 72)';
         window.alert("Please fillout everything");
         return;
     }
 
     //check email if is in correct format
     if (validateEmail(email) == false) {
+        emailTextbox.style.border = '1px solid rgb(235, 72, 72)';
         window.alert("Email has an incorrect format");
         return;
     }
 
     //check password if greater than 6 (firebaseauth accepts >= 6 password)
     if (validatePassword(password) == false) {
+        passwordTextbox.focus();
+        passwordTextbox.style.border = '1px solid rgb(235, 72, 72)';
         window.alert("Password must be greater than 6");
         return;
     }
@@ -78,9 +96,15 @@ function signUp() {
                             }
                         });
                 } else {
+                    // focus on email textbox
+                    emailTextbox.focus();
+                    emailTextbox.style.border = '1px solid rgb(235, 72, 72)';
                     window.alert("email has been denied");
                 }
             } else {
+                // focus on email textbox
+                emailTextbox.focus();
+                emailTextbox.style.border = '1px solid rgb(235, 72, 72)';
                 window.alert("Email already exists");
             }
         })

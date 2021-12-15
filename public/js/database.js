@@ -118,7 +118,7 @@ function renderAdminToTable(firstName, lastName, email, password) {
     }
 
     btnEditAdmin.onclick = function() {
-        window.alert("Edit this admin account? " + email);
+        showEditPopup(firstName, lastName, email, password);
     }
 
     btnDeleteAdmin.onclick = function() {
@@ -195,4 +195,21 @@ const adminConverter = {
         const data = snapshot.data(options);
         return new Admin(data.adminID, data.firstName, data.lastName, data.email, data.password, data.userRole);
     }
+}
+
+function showEditPopup(firstName, lastName, email, password) {
+    firstNameTextboxEdit = document.getElementById('firstNameEdit');
+    lastNameTextboxEdit = document.getElementById('lastNameEdit');
+    emailTextboxEdit = document.getElementById('emailEdit');
+    passwordTextboxEdit = document.getElementById('passwordEdit');
+    document.querySelector(".popup").classList.add("active");
+
+    firstNameTextboxEdit.value = firstName;
+    lastNameTextboxEdit.value = lastName;
+    emailTextboxEdit.value = email;
+    passwordTextboxEdit.value = password;
+}
+
+function hideEditPopup() {
+    document.querySelector(".popup").classList.remove("active");
 }

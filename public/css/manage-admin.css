@@ -293,3 +293,38 @@ button:hover {
     cursor: pointer;
     margin-left: 10px;
 }
+
+
+/* Popup edit admin */
+
+.popup {
+    position: absolute;
+    top: -150%;
+    left: 50%;
+    opacity: 0;
+    transform: translate(-50%, -50%)scale(1.25);
+    width: fit-content;
+    padding: 20px 30px;
+    background-color: #74e3ff;
+    box-shadow: 2px 2px 5px 5px rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+}
+
+.popup.active {
+    top: 50%;
+    opacity: 1;
+    transform: translate(-50%, -50%)scale(1);
+    transition: top 0ms ease-in-out 200ms, opacity 200ms ease-in-out 0ms, transform 20ms ease-in-out 0ms;
+}
+
+.popup .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 15px;
+    height: 15px;
+    color: #eee;
+    text-align: center;
+    line-height: 15px;
+    cursor: pointer;
+}
