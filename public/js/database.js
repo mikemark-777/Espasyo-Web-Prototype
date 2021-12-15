@@ -200,8 +200,8 @@ const adminConverter = {
 function showEditPopup(adminID, firstName, lastName, email, password) {
     firstNameTextboxEdit = document.getElementById('firstNameEdit');
     lastNameTextboxEdit = document.getElementById('lastNameEdit');
-    emailTextboxEdit = document.getElementById('emailEdit');
-    passwordTextboxEdit = document.getElementById('passwordEdit');
+    // emailTextboxEdit = document.getElementById('emailEdit');
+    // passwordTextboxEdit = document.getElementById('passwordEdit');
     document.querySelector(".popup").classList.add("active");
 
     firstNameTextboxEdit.value = firstName;
@@ -209,15 +209,34 @@ function showEditPopup(adminID, firstName, lastName, email, password) {
     emailTextboxEdit.value = email;
     passwordTextboxEdit.value = password;
 
+    var btnSaveEdit = document.getElementById("saveEdit");
+    btnSaveEdit.onclick = function() {
 
+        firstNameEdit = firstNameTextboxEdit.value;
+        lastNameEdit = lastNameTextboxEdit.value;
+        // emailEdit = emailTextboxEdit.value;
+        // passwordEdit = passwordTextboxEdit.value;
+
+        // isChangeMadeIn(firstName, lastName, email, password, firstNameEdit, lastNameEdit, emailEdit, passwordEdit);
+    };
 }
 
 function hideEditPopup() {
     document.querySelector(".popup").classList.remove("active");
 }
 
-function isChangeMadeIn(firstName, lastName, email, password) {
+function isChangeMadeIn(firstName, lastName, email, password, firstNameEdit, lastNameEdit, emailEdit, passwordEdit) {
+    var isFNChanged = firstName != firstNameEdit;
+    var isLNChanged = lastName != lastNameEdit;
+    var isEmailChanged = email != emailEdit;
+    var isPasswordChanged = password != passwordEdit;
 
+    if (isFNChanged == true) {
+        window.alert("Firstname changed")
+    } else {
+        window.alert("Firstname not changed")
+    }
+    document.querySelector(".popup").classList.remove("active");
 }
 
 function editAdmin() {
