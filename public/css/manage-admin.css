@@ -361,3 +361,12 @@ button:hover {
 .btn-save-edit-admin {
     color: black;
 }
+
+#link-edit-email,
+#link-edit-password {
+    color: black;
+    border: none;
+    width: 250px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+}

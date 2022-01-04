@@ -267,15 +267,15 @@ auth.onAuthStateChanged(function(user) {
 
 function setIsSuperAdmin(isSuperAdmin) {
     window.alert("setting Super Admin " + isSuperAdmin);
-    sessionStorage.setItem("isSuperAdmin", isSuperAdmin);
+    localStorage.setItem("isSuperAdmin", isSuperAdmin);
 }
 
 function getIsSuperAdmin() {
-    return sessionStorage.getItem("isSuperAdmin");
+    return localStorage.getItem("isSuperAdmin");
 }
 
 function removeIsSuperAdmin() {
-    sessionStorage.removeItem("isSuperAdmin");
+    localStorage.removeItem("isSuperAdmin");
 }
 
 
