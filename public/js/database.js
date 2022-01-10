@@ -197,48 +197,71 @@ const adminConverter = {
     }
 }
 
+
 function showEditPopup(adminID, firstName, lastName, email, password) {
     firstNameTextboxEdit = document.getElementById('firstNameEdit');
     lastNameTextboxEdit = document.getElementById('lastNameEdit');
-    // emailTextboxEdit = document.getElementById('emailEdit');
-    // passwordTextboxEdit = document.getElementById('passwordEdit');
     document.querySelector(".popup").classList.add("active");
 
     firstNameTextboxEdit.value = firstName;
     lastNameTextboxEdit.value = lastName;
-    emailTextboxEdit.value = email;
-    passwordTextboxEdit.value = password;
 
     var btnSaveEdit = document.getElementById("saveEdit");
+    var btnCancelEdit = document.getElementById("cancelEdit");
+    var linkToChangeEmail = document.getElementById("link-edit-email");
+    var linkToChangePassword = document.getElementById("link-edit-password");
+
     btnSaveEdit.onclick = function() {
 
         firstNameEdit = firstNameTextboxEdit.value;
         lastNameEdit = lastNameTextboxEdit.value;
-        // emailEdit = emailTextboxEdit.value;
-        // passwordEdit = passwordTextboxEdit.value;
 
-        // isChangeMadeIn(firstName, lastName, email, password, firstNameEdit, lastNameEdit, emailEdit, passwordEdit);
+        isChangeMadeIn(firstName, lastName, firstNameEdit, lastNameEdit, adminID);
     };
+
+    btnCancelEdit.onclick = function() {
+        hideEditPopup();
+    };
+
+    linkToChangeEmail.onclick = function() {
+        window.alert("going to change email");
+    };
+
+    linkToChangePassword.onclick = function() {
+        window.alert("going to change password");
+    };
+
 }
 
 function hideEditPopup() {
     document.querySelector(".popup").classList.remove("active");
 }
 
-function isChangeMadeIn(firstName, lastName, email, password, firstNameEdit, lastNameEdit, emailEdit, passwordEdit) {
+function isChangeMadeIn(firstName, lastName, firstNameEdit, lastNameEdit, adminID) {
     var isFNChanged = firstName != firstNameEdit;
     var isLNChanged = lastName != lastNameEdit;
-    var isEmailChanged = email != emailEdit;
-    var isPasswordChanged = password != passwordEdit;
 
-    if (isFNChanged == true) {
-        window.alert("Firstname changed")
+    if (isFNChanged == true || isLNChanged == true) {
+        editAdmin(firstNameEdit, lastNameEdit, adminID);
     } else {
-        window.alert("Firstname not changed")
+        window.alert("Niether Firstname nor Lastname changed")
     }
     document.querySelector(".popup").classList.remove("active");
 }
 
-function editAdmin() {
+function editAdmin(firstName, lastName, adminID) {
+    var adminDocRef = database.collection("admins").doc(adminID);
+
+    adminDocRef.update({
+            firstName: firstName,
+            lastName: lastName
+        })
+        .then(() => {
+            window.alert("Admin successfully edited");
+            location.reload();
+        })
+        .catch((error) => {
+            window.alert(error);
+        });
 
 }
