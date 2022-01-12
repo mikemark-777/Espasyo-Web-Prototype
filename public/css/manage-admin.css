@@ -354,6 +354,10 @@ button:hover {
     border: none;
 }
 
+.btns-edit {
+    margin-bottom: 16px;
+}
+
 .btn-cancel-edit-admin {
     background-color: #dd3619;
 }
@@ -369,4 +373,5 @@ button:hover {
     width: 250px;
     margin-top: 6px;
     margin-bottom: 6px;
+    cursor: pointer;
 }

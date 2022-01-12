@@ -244,7 +244,7 @@ function isChangeMadeIn(firstName, lastName, firstNameEdit, lastNameEdit, adminI
     if (isFNChanged == true || isLNChanged == true) {
         editAdmin(firstNameEdit, lastNameEdit, adminID);
     } else {
-        window.alert("Niether Firstname nor Lastname changed")
+        window.alert("Nothing is changed")
     }
     document.querySelector(".popup").classList.remove("active");
 }
