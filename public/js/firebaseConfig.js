@@ -14,6 +14,6 @@ const auth = espasyoWebApp.auth();
 const database = espasyoWebApp.firestore();
 
 
-//for creation of admin account ONLY ===============================================
+//for creation, deleting, updating of email and password of admin account ONLY ===============================================
 const secondApp = firebase.initializeApp(firebaseConfig, "secondApp");
 const secondAppAuth = secondApp.auth();

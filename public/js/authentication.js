@@ -167,7 +167,6 @@ function login() {
             }).catch((error) => {
                 console.log("Error getting document:", error);
             });
-            s
         })
         .catch(function(error) {
             var error_code = error.code;
@@ -278,7 +277,16 @@ function removeIsSuperAdmin() {
     localStorage.removeItem("isSuperAdmin");
 }
 
-
+//for deleting and updating admin email, password
+function loginAdminForDeletion(email, password) {
+    secondAppAuth.signInWithEmailAndPassword(email, password)
+        .then(function() {
+            window.alert("Admin logged in for deletion");
+        })
+        .catch((error) => {
+            window.alert(error);
+        });
+}
 
 //for testing==================
 
@@ -292,19 +300,10 @@ function isUserLoggedIn() {
     }
 }
 
-function whoIsUser() {
-    var user = auth.currentUser;
-    if (user == null) {
-        window.alert("user is: null " + loggedSuperAdmin);
+function isSecondAppAuthHasLoggedIn() {
+    if (secondAppAuth.currentUser == null) {
+        window.alert("secondAppAuth.currentUser is null");
     } else {
-        window.alert("user is: " + user.uid);
-    }
-}
-
-function isAuth1EqualsAuth2() {
-    if (auth == secondAppAuth) {
-        window.alert("same auth");
-    } else {
-        window.alert("not same auth");
+        window.alert("secondAppAuth.currentUser is NOT null");
     }
 }

@@ -2,15 +2,15 @@
 <html lang="en">
 
 <head>
-    <title>Reports</title> 
-    <link rel="shortcut icon" type="image/jpg" href="./images/espasyo_favicon.ico"/>
+    <title>Reports</title>
+    <link rel="shortcut icon" type="image/jpg" href="./images/espasyo_favicon.ico" />
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/report.css">
     <script src="./js/a076d05399.js"></script>
     <link rel="stylesheet" href="./css/bootstrap.min.css">
-    
+
 </head>
 
 <body>
@@ -28,7 +28,7 @@
         </ul>
     </nav>
 
-    <button class="btnLogin" onclick="isUserLoggedIn()">User Status</button><br>
+    <button class="btnLogin" onclick="isSecondAppAuthHasLoggedIn()">See SecondAppAuth</button><br>
 
     <!-- core firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
@@ -41,7 +41,7 @@
 
     <script>
         window.onload = function() {
-            if(getIsSuperAdmin() == "false") {
+            if (getIsSuperAdmin() == "false") {
                 document.getElementById("btn-manage-admin").style.display = "none";
             }
         }

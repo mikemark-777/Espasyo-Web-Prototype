@@ -122,7 +122,7 @@ function renderAdminToTable(adminID, firstName, lastName, email, password) {
     }
 
     btnDeleteAdmin.onclick = function() {
-        window.alert("Delete this admin account? " + email);
+        gotoDeleteAdminPage(adminID);
     }
 
 
@@ -264,4 +264,93 @@ function editAdmin(firstName, lastName, adminID) {
             window.alert(error);
         });
 
+}
+
+//navigate from manage-admin page to delete admin page -----------------------------------
+function gotoDeleteAdminPage(adminID) {
+    window.location.assign("delete-admin.html");
+    setAdminIDToDelete(adminID);
+}
+
+var btnDeleteAccount = document.getElementById("button-delete-account");
+btnDeleteAccount.onclick = function() {
+    const adminToDelete = secondAppAuth.currentUser;
+    adminToDelete.delete()
+        .then(() => {
+            //delete document in admins and users collection
+            var id = getAdminID();
+            var usersDocRef = database.collection("users").doc(id);
+            var adminDocRef = database.collection("admins").doc(id);
+            usersDocRef.delete()
+                .then(() => {
+                    adminDocRef.delete()
+                        .then(() => {
+                            removeAdminID();
+                            window.alert("Admin account deleted");
+                            window.location.assign("manage-admin.html");
+                        })
+                        .catch((error) => {
+                            window.alert(error);
+                        });
+                })
+                .catch((error) => {
+                    window.alert(error);
+                });
+        })
+        .catch((error) => {
+            window.alert(error);
+        });
+};
+
+var btnCancelDeleteAccount = document.getElementById("button-cancel-delete");
+btnCancelDeleteAccount.onclick = function() {
+    isSecondAppAuthHasLoggedIn();
+}
+
+function displayAdminData() {
+    var adminID = getAdminID();
+    var adminCollectionRef = database.collection("admins").doc(adminID);
+    adminCollectionRef.get().then((doc) => {
+            if (doc.exists) {
+                adminObject = doc.data();
+                var firstName = adminObject.firstName;
+                var lastName = adminObject.lastName;
+                var email = adminObject.email;
+                var password = adminObject.password;
+
+                var displayFN = document.getElementById("adminFN");
+                var displayLN = document.getElementById("adminLN");
+                var displayEmail = document.getElementById("adminEmail");
+
+                displayFN.innerText = firstName;
+                displayLN.innerText = lastName;
+                displayEmail.innerText = email;
+
+                loginAdminForDeletion(email, password);
+
+            } else {
+                window.alert("doc dont exists");
+            }
+        })
+        .catch((error) => {
+            window.alert(error);
+        });
+}
+
+function checkIfHasAdminToDelete() {
+    if (getAdminID() == null) {
+        window.location.assign("manage-admin.html");
+    }
+}
+
+function setAdminIDToDelete(adminID) {
+    localStorage.setItem("adminID", adminID);
+}
+
+function getAdminID() {
+    return localStorage.getItem("adminID");
+}
+
+function removeAdminID() {
+    localStorage.removeItem("adminID");
 }
