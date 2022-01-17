@@ -278,10 +278,10 @@ function removeIsSuperAdmin() {
 }
 
 //for deleting and updating admin email, password
-function loginAdminForDeletion(email, password) {
+function loginAdminForChanges(email, password) {
     secondAppAuth.signInWithEmailAndPassword(email, password)
         .then(function() {
-            window.alert("Admin logged in for deletion");
+            //nothing will happen
         })
         .catch((error) => {
             window.alert(error);

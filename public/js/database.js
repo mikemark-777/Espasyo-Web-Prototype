@@ -125,7 +125,6 @@ function renderAdminToTable(adminID, firstName, lastName, email, password) {
         gotoDeleteAdminPage(adminID);
     }
 
-
     trow.appendChild(td1);
     trow.appendChild(td2);
     trow.appendChild(td3);
@@ -224,7 +223,7 @@ function showEditPopup(adminID, firstName, lastName, email, password) {
     };
 
     linkToChangeEmail.onclick = function() {
-        window.alert("going to change email");
+        gotoChangeAdminEmailPage(adminID, email, password);
     };
 
     linkToChangePassword.onclick = function() {
@@ -304,7 +303,10 @@ btnDeleteAccount.onclick = function() {
 
 var btnCancelDeleteAccount = document.getElementById("button-cancel-delete");
 btnCancelDeleteAccount.onclick = function() {
-    isSecondAppAuthHasLoggedIn();
+    secondAppAuth.signOut().then(() => {
+        removeAdminID();
+        window.location.replace("manage-admin.html");
+    });
 }
 
 function displayAdminData() {
@@ -326,7 +328,7 @@ function displayAdminData() {
                 displayLN.innerText = lastName;
                 displayEmail.innerText = email;
 
-                loginAdminForDeletion(email, password);
+                loginAdminForChanges(email, password);
 
             } else {
                 window.alert("doc dont exists");
@@ -343,14 +345,44 @@ function checkIfHasAdminToDelete() {
     }
 }
 
+
+//navigate from manage-admin page to edit email page -----------------------------------
+
+function gotoChangeAdminEmailPage(adminID, email, password) {
+    window.location.assign("change-admin-email.html");
+    setAdminIDToChangeEmail(adminID);
+}
+
+var btnChangeEmail = document.getElementById("button-change-email");
+btnChangeEmail.onclick = function() {
+    window.alert("change email button clicked");
+}
+
+var btnCancelChangeEmail = document.getElementByID("button-cancel-change-email");
+btnCancelChangeEmail.onclick = function() {
+    window.alert("cancel change email button clicked");
+    // secondAppAuth.signOut().then(() => {
+    //     removeAdminID();
+    //     window.location.replace("manage-admin.html");
+    // });
+}
+
+//setting adminID for deleting admin account
 function setAdminIDToDelete(adminID) {
     localStorage.setItem("adminID", adminID);
 }
 
+//setting adminID for changing admin email
+function setAdminIDToChangeEmail(adminID) {
+    localStorage.setItem("adminID", adminID);
+}
+
+//getting the setted adminID
 function getAdminID() {
     return localStorage.getItem("adminID");
 }
 
+//removing the setted adminID
 function removeAdminID() {
     localStorage.removeItem("adminID");
 }
