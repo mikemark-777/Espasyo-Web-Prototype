@@ -265,32 +265,18 @@ function editAdmin(firstName, lastName, adminID) {
 
 }
 
-//navigate from manage-admin page to delete admin page -----------------------------------
-function gotoDeleteAdminPage(adminID) {
-    window.location.assign("delete-admin.html");
-    setAdminIDToDelete(adminID);
-}
-
-var btnDeleteAccount = document.getElementById("button-delete-account");
-btnDeleteAccount.onclick = function() {
-    const adminToDelete = secondAppAuth.currentUser;
-    adminToDelete.delete()
+function deleteAdminData() {
+    //delete document in admins and users collection
+    var id = getAdminID();
+    var usersDocRef = database.collection("users").doc(id);
+    var adminDocRef = database.collection("admins").doc(id);
+    usersDocRef.delete()
         .then(() => {
-            //delete document in admins and users collection
-            var id = getAdminID();
-            var usersDocRef = database.collection("users").doc(id);
-            var adminDocRef = database.collection("admins").doc(id);
-            usersDocRef.delete()
+            adminDocRef.delete()
                 .then(() => {
-                    adminDocRef.delete()
-                        .then(() => {
-                            removeAdminID();
-                            window.alert("Admin account deleted");
-                            window.location.assign("manage-admin.html");
-                        })
-                        .catch((error) => {
-                            window.alert(error);
-                        });
+                    removeAdminID();
+                    window.alert("Admin account deleted");
+                    window.location.assign("manage-admin.html");
                 })
                 .catch((error) => {
                     window.alert(error);
@@ -299,18 +285,10 @@ btnDeleteAccount.onclick = function() {
         .catch((error) => {
             window.alert(error);
         });
-};
-
-var btnCancelDeleteAccount = document.getElementById("button-cancel-delete");
-btnCancelDeleteAccount.onclick = function() {
-    secondAppAuth.signOut().then(() => {
-        removeAdminID();
-        window.location.replace("manage-admin.html");
-    });
 }
 
-function displayAdminData() {
-    var adminID = getAdminID();
+function displayAdminDataToDelete() {
+    var adminID = getAdminIDToDelete();
     var adminCollectionRef = database.collection("admins").doc(adminID);
     adminCollectionRef.get().then((doc) => {
             if (doc.exists) {
@@ -339,50 +317,32 @@ function displayAdminData() {
         });
 }
 
-function checkIfHasAdminToDelete() {
-    if (getAdminID() == null) {
-        window.location.assign("manage-admin.html");
-    }
-}
+function displayAdminDataToUpdateEmail() {
+    var adminID = getAdminIDToDelete();
+    var adminCollectionRef = database.collection("admins").doc(adminID);
+    adminCollectionRef.get().then((doc) => {
+            if (doc.exists) {
+                adminObject = doc.data();
+                var firstName = adminObject.firstName;
+                var lastName = adminObject.lastName;
+                var email = adminObject.email;
+                var password = adminObject.password;
 
+                var displayFN = document.getElementById("adminFN");
+                var displayLN = document.getElementById("adminLN");
+                var displayEmail = document.getElementById("adminEmail");
 
-//navigate from manage-admin page to edit email page -----------------------------------
+                displayFN.innerText = firstName;
+                displayLN.innerText = lastName;
+                displayEmail.innerText = email;
 
-function gotoChangeAdminEmailPage(adminID, email, password) {
-    window.location.assign("change-admin-email.html");
-    setAdminIDToChangeEmail(adminID);
-}
+                loginAdminForChanges(email, password);
 
-var btnChangeEmail = document.getElementById("button-change-email");
-btnChangeEmail.onclick = function() {
-    window.alert("change email button clicked");
-}
-
-var btnCancelChangeEmail = document.getElementByID("button-cancel-change-email");
-btnCancelChangeEmail.onclick = function() {
-    window.alert("cancel change email button clicked");
-    // secondAppAuth.signOut().then(() => {
-    //     removeAdminID();
-    //     window.location.replace("manage-admin.html");
-    // });
-}
-
-//setting adminID for deleting admin account
-function setAdminIDToDelete(adminID) {
-    localStorage.setItem("adminID", adminID);
-}
-
-//setting adminID for changing admin email
-function setAdminIDToChangeEmail(adminID) {
-    localStorage.setItem("adminID", adminID);
-}
-
-//getting the setted adminID
-function getAdminID() {
-    return localStorage.getItem("adminID");
-}
-
-//removing the setted adminID
-function removeAdminID() {
-    localStorage.removeItem("adminID");
+            } else {
+                window.alert("doc dont exists");
+            }
+        })
+        .catch((error) => {
+            window.alert(error);
+        });
 }

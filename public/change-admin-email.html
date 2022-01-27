@@ -46,7 +46,7 @@
         </div>
         <div class="change-buttons">
             <button class="btn-change-email" id="button-change-email">Change Email</button>
-            <button class="btn-cancel-change-email" id="button-cancel-change-email">Cancel</button>
+            <button class="btn-cancel-change-email" id="samplecancel">Cancel</button>
         </div>
     </div>
 
@@ -58,6 +58,7 @@
     <script src="./js/firebaseConfig.js"></script>
     <script src="./js/authentication.js"></script>
     <script src="./js/database.js"></script>
+    <script src="./js/change-email.js"></script>
 
 
     <script>
@@ -66,7 +67,7 @@
             if (getIsSuperAdmin() == "false") {
                 document.getElementById("btn-manage-admin").style.display = "none";
             }
-            displayAdminData();
+            displayAdminDataToUpdateEmail();
         }
     </script>
 
