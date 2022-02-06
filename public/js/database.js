@@ -223,7 +223,7 @@ function showEditPopup(adminID, firstName, lastName, email, password) {
     };
 
     linkToChangeEmail.onclick = function() {
-        gotoChangeAdminEmailPage(adminID, email, password);
+        gotoChangeAdminEmailPage(adminID);
     };
 
     linkToChangePassword.onclick = function() {
@@ -267,14 +267,14 @@ function editAdmin(firstName, lastName, adminID) {
 
 function deleteAdminData() {
     //delete document in admins and users collection
-    var id = getAdminID();
+    var id = getAdminIDToDelete();
     var usersDocRef = database.collection("users").doc(id);
     var adminDocRef = database.collection("admins").doc(id);
     usersDocRef.delete()
         .then(() => {
             adminDocRef.delete()
                 .then(() => {
-                    removeAdminID();
+                    removeAdminIDToDelete();
                     window.alert("Admin account deleted");
                     window.location.assign("manage-admin.html");
                 })
@@ -286,8 +286,39 @@ function deleteAdminData() {
             window.alert(error);
         });
 }
+//will display the data of the admin whose email will be changed
+function fetchAndDisplayAdminData_updateEmail() {
+    var adminID = getAdminIDToUpdateEmail();
+    var adminCollectionRef = database.collection("admins").doc(adminID);
+    adminCollectionRef.get().then((doc) => {
+            if (doc.exists) {
+                adminObject = doc.data();
+                var firstName = adminObject.firstName;
+                var lastName = adminObject.lastName;
+                var email = adminObject.email;
+                var password = adminObject.password;
 
-function displayAdminDataToDelete() {
+                var displayFN = document.getElementById("adminFN");
+                var displayLN = document.getElementById("adminLN");
+                var displayEmail = document.getElementById("adminEmail");
+
+                displayFN.innerText = firstName;
+                displayLN.innerText = lastName;
+                displayEmail.innerText = email;
+                loginAdminForChanges(email, password);
+
+            } else {
+                window.alert("doc dont exists");
+            }
+        })
+        .catch((error) => {
+            window.alert(error);
+        });
+}
+
+
+//will display the admin data to be deleted
+function fetchAndDisplayAdminData_deleteAdmin() {
     var adminID = getAdminIDToDelete();
     var adminCollectionRef = database.collection("admins").doc(adminID);
     adminCollectionRef.get().then((doc) => {
@@ -317,32 +348,28 @@ function displayAdminDataToDelete() {
         });
 }
 
-function displayAdminDataToUpdateEmail() {
-    var adminID = getAdminIDToDelete();
+function changeEmailInDatabase(adminID, newEmail) {
     var adminCollectionRef = database.collection("admins").doc(adminID);
-    adminCollectionRef.get().then((doc) => {
-            if (doc.exists) {
-                adminObject = doc.data();
-                var firstName = adminObject.firstName;
-                var lastName = adminObject.lastName;
-                var email = adminObject.email;
-                var password = adminObject.password;
+    var usersCollectionRef = database.collection("users").doc(adminID);
 
-                var displayFN = document.getElementById("adminFN");
-                var displayLN = document.getElementById("adminLN");
-                var displayEmail = document.getElementById("adminEmail");
-
-                displayFN.innerText = firstName;
-                displayLN.innerText = lastName;
-                displayEmail.innerText = email;
-
-                loginAdminForChanges(email, password);
-
-            } else {
-                window.alert("doc dont exists");
-            }
+    adminCollectionRef.update({
+            email: newEmail
+        })
+        .then(() => {
+            usersCollectionRef.update({
+                    email: newEmail
+                })
+                .then(() => {
+                    //email is changed in both admins and users collection in the database
+                    window.alert("Email has been changed");
+                    window.location.assign("manage-admin.html");
+                })
+                .catch((error) => {
+                    window.alert(error.message);
+                });
         })
         .catch((error) => {
-            window.alert(error);
+            window.alert(error.message);
         });
+
 }

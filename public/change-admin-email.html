@@ -46,7 +46,7 @@
         </div>
         <div class="change-buttons">
             <button class="btn-change-email" id="button-change-email">Change Email</button>
-            <button class="btn-cancel-change-email" id="samplecancel">Cancel</button>
+            <button class="btn-cancel-change-email" id="button-cancel-change-email">Cancel</button>
         </div>
     </div>
 
@@ -64,10 +64,16 @@
     <script>
         window.onload = function() {
 
+            //will check if the logged in user is an admin or superadmin
             if (getIsSuperAdmin() == "false") {
                 document.getElementById("btn-manage-admin").style.display = "none";
             }
-            displayAdminDataToUpdateEmail();
+
+            //will check if there will be an admin to change email
+            checkIfHasAdminToChangeEmail();
+
+            //will display the admin data whose email will be changed
+            displayAdminData_updateEmail();
         }
     </script>
 

@@ -4,10 +4,12 @@ function gotoDeleteAdminPage(adminID) {
     setAdminIDToDelete(adminID);
 }
 
-//setting adminID for deleting admin account
-function setAdminIDToDelete(adminID) {
-    localStorage.setItem("adminID", adminID);
+//will display the data of the admin whose email will be changed
+function displayAdminData_deleteAdmin() {
+    //from database
+    fetchAndDisplayAdminData_deleteAdmin();
 }
+
 
 var btnDeleteAccount = document.getElementById("button-delete-account");
 btnDeleteAccount.onclick = function() {
@@ -24,7 +26,7 @@ btnDeleteAccount.onclick = function() {
 var btnCancelDeleteAccount = document.getElementById("button-cancel-delete");
 btnCancelDeleteAccount.onclick = function() {
     secondAppAuth.signOut().then(() => {
-        removeAdminID();
+        removeAdminIDToDelete();
         window.location.replace("manage-admin.html");
     });
 }
@@ -35,12 +37,17 @@ function checkIfHasAdminToDelete() {
     }
 }
 
-//getting the setted adminID
-function getAdminIDToDelete() {
-    return localStorage.getItem("adminID");
+//setting adminID for deleting admin account
+function setAdminIDToDelete(adminID) {
+    localStorage.setItem("adminID-delete", adminID);
 }
 
-//removing the setted adminID
-function removeAdminID() {
-    localStorage.removeItem("adminID");
+//getting the setted adminID for deleting admin account
+function getAdminIDToDelete() {
+    return localStorage.getItem("adminID-delete");
+}
+
+//removing the setted adminID for deleting admin account
+function removeAdminIDToDelete() {
+    localStorage.removeItem("adminID-delete");
 }

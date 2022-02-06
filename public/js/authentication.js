@@ -290,7 +290,6 @@ function loginAdminForChanges(email, password) {
 
 //for testing==================
 
-
 function isUserLoggedIn() {
     var user = auth.currentUser;
     if (user != null) {

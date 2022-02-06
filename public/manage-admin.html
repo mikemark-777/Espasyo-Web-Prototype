@@ -87,11 +87,14 @@
     <script src="./js/firebaseConfig.js"></script>
     <script src="./js/authentication.js"></script>
     <script src="./js/database.js"></script>
+    <script src="./js/change-email.js"></script>
     <script src="./js/delete-admin.js"></script>
 
     <script>
         window.onload = function() {
             fetchListOfAdminToDatabase();
+
+            //will check if the logged in user is an admin or superadmin
             if (getIsSuperAdmin() == "false") {
                 document.getElementById("btn-manage-admin").style.display = "none";
             }

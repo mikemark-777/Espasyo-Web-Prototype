@@ -1,19 +1,134 @@
-function gotoChangeAdminEmailPage(adminID, email, password) {
+function gotoChangeAdminEmailPage(adminID) {
     window.location.assign("change-admin-email.html");
     setAdminIDToChangeEmail(adminID);
 }
 
-//setting adminID for changing admin email
-function setAdminIDToChangeEmail(adminID) {
-    localStorage.setItem("adminID", adminID);
+//will display the data of the admin whose email will be changed
+function displayAdminData_updateEmail() {
+    //from database
+    fetchAndDisplayAdminData_updateEmail();
 }
 
 var btnChangeEmail = document.getElementById("button-change-email");
 btnChangeEmail.onclick = function() {
-    window.alert("change email button clicked");
+    changeEmail();
 }
 
-var btnCancelChangeEmail = document.getElementById("samplecancel");
+var btnCancelChangeEmail = document.getElementById("button-cancel-change-email");
 btnCancelChangeEmail.onclick = function() {
-    window.alert("cancel change email button clicked");
+    removeAdminIDToChangeEmail();
+    window.location.replace("manage-admin.html");
+}
+
+function checkIfHasAdminToChangeEmail() {
+    if (getAdminIDToUpdateEmail() == null) {
+        window.location.assign("manage-admin.html");
+    }
+}
+
+//setting adminID for changing admin email
+function setAdminIDToChangeEmail(adminID) {
+    localStorage.setItem("adminID-changeEmail", adminID);
+}
+
+//getting the setted adminID for changing admin email
+function getAdminIDToUpdateEmail() {
+    return localStorage.getItem("adminID-changeEmail");
+}
+
+//removing the setted adminID for changing admin email
+function removeAdminIDToChangeEmail() {
+    localStorage.removeItem("adminID-changeEmail");
+}
+
+function changeEmail() {
+    var newEmailInput = document.getElementById("new-emailInput");
+    var newEmail = newEmailInput.value;
+
+    if (validateInput(newEmail) == false) {
+        window.alert("Please enter New Email");
+        return;
+    }
+
+    if (validateNewEmail(newEmail) == false) {
+        newEmailInput.style.border = '1px solid rgb(235, 72, 72)';
+        window.alert("Email has an incorrect format");
+        return;
+    }
+
+    var adminToChangeEmail = secondAppAuth.currentUser;
+
+    //will check if the email provided already exists in the system
+    secondAppAuth.fetchSignInMethodsForEmail(newEmail)
+        .then(function(signInMethods) {
+            if (signInMethods.length < 1) {
+                //if email is not existing (can proceed)
+                var isEmailConfirmed = confirmNewEmail(newEmail);
+                if (isEmailConfirmed == true) {
+
+                    adminToChangeEmail.updateEmail(newEmail)
+                        .then(() => {
+                            //will change the email saved in the database
+                            changeEmailInDatabase(adminToChangeEmail.uid, newEmail);
+                            sendEmailVerificationToNewEmail(newEmail);
+                        }).catch((error) => {
+                            // An error occurred
+                            window.alert(error.message);
+                        });
+
+                }
+            } else {
+                // focus on email textbox
+                newEmailInput.focus();
+                newEmailInput.style.border = '1px solid rgb(235, 72, 72)';
+                window.alert("Email already exists");
+            }
+        })
+        .catch(function(error) {
+            var error_code = error.code;
+            var error_message = error.message;
+
+            if (error_code == "auth/email-already-in-use") {
+                window.alert("Email already exists");
+            }
+        });
+}
+
+
+function sendEmailVerificationToNewEmail(newEmail) {
+    // code for send email verification to newly created email of landlord
+    secondAppAuth.currentUser.sendEmailVerification()
+        .then(() => {
+            window.alert("Email Verification has been sent to email: " + newEmail + " Please check your email and click the link provided to authenticate the new email for the admin account.\n\nThank you!");
+        })
+        .catch((error) => {
+            window.alert(error.message);
+        });
+}
+
+function confirmNewEmail(newEmail) {
+    var answer = window.confirm("We will send an email verification to the new email you have provided. Make sure that the email is existing.\n\nAre you sure you will use the new email " + newEmail + " for this admin account?");
+    return answer;
+}
+
+function validateNewEmail(newEmail) {
+    var validRegex = /^[^@]+@\w+(\.\w+)+\w$/;
+    if (validRegex.test(newEmail)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+//will validate if there is an input or none
+function validateInput(input) {
+    if (input == null) {
+        return false;
+    }
+
+    if (input.length <= 0) {
+        return false;
+    } else {
+        return true;
+    }
 }
