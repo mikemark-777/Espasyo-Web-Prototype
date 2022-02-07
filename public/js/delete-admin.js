@@ -27,6 +27,7 @@ var btnCancelDeleteAccount = document.getElementById("button-cancel-delete");
 btnCancelDeleteAccount.onclick = function() {
     secondAppAuth.signOut().then(() => {
         removeAdminIDToDelete();
+        logoutAdminForChanges();
         window.location.replace("manage-admin.html");
     });
 }

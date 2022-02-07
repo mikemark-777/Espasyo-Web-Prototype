@@ -248,6 +248,8 @@ function isChangeMadeIn(firstName, lastName, firstNameEdit, lastNameEdit, adminI
     document.querySelector(".popup").classList.remove("active");
 }
 
+
+
 function editAdmin(firstName, lastName, adminID) {
     var adminDocRef = database.collection("admins").doc(adminID);
 
@@ -265,27 +267,6 @@ function editAdmin(firstName, lastName, adminID) {
 
 }
 
-function deleteAdminData() {
-    //delete document in admins and users collection
-    var id = getAdminIDToDelete();
-    var usersDocRef = database.collection("users").doc(id);
-    var adminDocRef = database.collection("admins").doc(id);
-    usersDocRef.delete()
-        .then(() => {
-            adminDocRef.delete()
-                .then(() => {
-                    removeAdminIDToDelete();
-                    window.alert("Admin account deleted");
-                    window.location.assign("manage-admin.html");
-                })
-                .catch((error) => {
-                    window.alert(error);
-                });
-        })
-        .catch((error) => {
-            window.alert(error);
-        });
-}
 //will display the data of the admin whose email will be changed
 function fetchAndDisplayAdminData_updateEmail() {
     var adminID = getAdminIDToUpdateEmail();
@@ -361,6 +342,7 @@ function changeEmailInDatabase(adminID, newEmail) {
                 })
                 .then(() => {
                     //email is changed in both admins and users collection in the database
+                    logoutAdminForChanges();
                     window.alert("Email has been changed");
                     window.location.assign("manage-admin.html");
                 })
@@ -371,5 +353,26 @@ function changeEmailInDatabase(adminID, newEmail) {
         .catch((error) => {
             window.alert(error.message);
         });
+}
 
+function deleteAdminData() {
+    //delete document in admins and users collection
+    var id = getAdminIDToDelete();
+    var usersDocRef = database.collection("users").doc(id);
+    var adminDocRef = database.collection("admins").doc(id);
+    usersDocRef.delete()
+        .then(() => {
+            adminDocRef.delete()
+                .then(() => {
+                    removeAdminIDToDelete();
+                    window.alert("Admin account deleted in database.js");
+                    window.location.assign("manage-admin.html");
+                })
+                .catch((error) => {
+                    window.alert(error);
+                });
+        })
+        .catch((error) => {
+            window.alert(error);
+        });
 }

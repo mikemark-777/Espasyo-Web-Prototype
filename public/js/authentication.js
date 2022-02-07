@@ -288,6 +288,16 @@ function loginAdminForChanges(email, password) {
         });
 }
 
+function logoutAdminForChanges() {
+    secondAppAuth.signOut()
+        .then(() => {
+            //this will just logout the admin that is subject to changes
+        })
+        .catch((error) => {
+            window.alert(error.message);
+        });
+}
+
 //for testing==================
 
 function isUserLoggedIn() {
@@ -301,8 +311,8 @@ function isUserLoggedIn() {
 
 function isSecondAppAuthHasLoggedIn() {
     if (secondAppAuth.currentUser == null) {
-        window.alert("secondAppAuth.currentUser is null");
+        window.alert("secondAppAuth.currentUser is null ");
     } else {
-        window.alert("secondAppAuth.currentUser is NOT null");
+        window.alert("secondAppAuth.currentUser is NOT null ");
     }
 }

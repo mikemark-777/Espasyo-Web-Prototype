@@ -16,6 +16,7 @@ btnChangeEmail.onclick = function() {
 
 var btnCancelChangeEmail = document.getElementById("button-cancel-change-email");
 btnCancelChangeEmail.onclick = function() {
+    logoutAdminForChanges();
     removeAdminIDToChangeEmail();
     window.location.replace("manage-admin.html");
 }
