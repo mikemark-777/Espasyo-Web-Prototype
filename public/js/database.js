@@ -249,8 +249,6 @@ function isChangeMadeIn(firstName, lastName, firstNameEdit, lastNameEdit, adminI
     document.querySelector(".popup").classList.remove("active");
 }
 
-
-
 function editAdmin(firstName, lastName, adminID) {
     var adminDocRef = database.collection("admins").doc(adminID);
 
@@ -265,8 +263,9 @@ function editAdmin(firstName, lastName, adminID) {
         .catch((error) => {
             window.alert(error);
         });
-
 }
+
+// FOR UPDATING ADMIN EMAIL ====================================================
 
 //will display the data of the admin whose email will be changed
 function fetchAndDisplayAdminData_updateEmail() {
@@ -287,38 +286,6 @@ function fetchAndDisplayAdminData_updateEmail() {
                 displayFN.innerText = firstName;
                 displayLN.innerText = lastName;
                 displayEmail.innerText = email;
-                loginAdminForChanges(email, password);
-
-            } else {
-                window.alert("doc dont exists");
-            }
-        })
-        .catch((error) => {
-            window.alert(error);
-        });
-}
-
-
-//will display the admin data to be deleted
-function fetchAndDisplayAdminData_deleteAdmin() {
-    var adminID = getAdminIDToDelete();
-    var adminCollectionRef = database.collection("admins").doc(adminID);
-    adminCollectionRef.get().then((doc) => {
-            if (doc.exists) {
-                adminObject = doc.data();
-                var firstName = adminObject.firstName;
-                var lastName = adminObject.lastName;
-                var email = adminObject.email;
-                var password = adminObject.password;
-
-                var displayFN = document.getElementById("adminFN");
-                var displayLN = document.getElementById("adminLN");
-                var displayEmail = document.getElementById("adminEmail");
-
-                displayFN.innerText = firstName;
-                displayLN.innerText = lastName;
-                displayEmail.innerText = email;
-
                 loginAdminForChanges(email, password);
 
             } else {
@@ -353,6 +320,71 @@ function changeEmailInDatabase(adminID, newEmail) {
         })
         .catch((error) => {
             window.alert(error.message);
+        });
+}
+
+// FOR UPDATING ADMIN PASSWORD ====================================================
+
+//will display the data of the admin whose email will be changed
+function fetchAndDisplayAdminData_updatePassword() {
+    var adminID = getAdminIDToUpdatePassword();
+    var adminCollectionRef = database.collection("admins").doc(adminID);
+    adminCollectionRef.get().then((doc) => {
+            if (doc.exists) {
+                adminObject = doc.data();
+                var firstName = adminObject.firstName;
+                var lastName = adminObject.lastName;
+                var email = adminObject.email;
+                var password = adminObject.password;
+
+                var displayFN = document.getElementById("adminFN");
+                var displayLN = document.getElementById("adminLN");
+                var displayEmail = document.getElementById("adminEmail");
+
+                displayFN.innerText = firstName;
+                displayLN.innerText = lastName;
+                displayEmail.innerText = email;
+                loginAdminForChanges(email, password);
+
+            } else {
+                window.alert("doc dont exists");
+            }
+        })
+        .catch((error) => {
+            window.alert(error);
+        });
+}
+
+// FOR DELETING ADMIN ====================================================
+
+//will display the admin data to be deleted
+function fetchAndDisplayAdminData_deleteAdmin() {
+    var adminID = getAdminIDToDelete();
+    var adminCollectionRef = database.collection("admins").doc(adminID);
+    adminCollectionRef.get().then((doc) => {
+            if (doc.exists) {
+                adminObject = doc.data();
+                var firstName = adminObject.firstName;
+                var lastName = adminObject.lastName;
+                var email = adminObject.email;
+                var password = adminObject.password;
+
+                var displayFN = document.getElementById("adminFN");
+                var displayLN = document.getElementById("adminLN");
+                var displayEmail = document.getElementById("adminEmail");
+
+                displayFN.innerText = firstName;
+                displayLN.innerText = lastName;
+                displayEmail.innerText = email;
+
+                loginAdminForChanges(email, password);
+
+            } else {
+                window.alert("doc dont exists");
+            }
+        })
+        .catch((error) => {
+            window.alert(error);
         });
 }
 
