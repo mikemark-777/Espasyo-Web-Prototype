@@ -227,7 +227,8 @@ function showEditPopup(adminID, firstName, lastName, email, password) {
     };
 
     linkToChangePassword.onclick = function() {
-        window.alert("going to change password");
+        // gotoChangeAdminPasswordPage(adminID);
+        gotoChangeAdminPasswordPage(adminID);
     };
 
 }

@@ -112,6 +112,8 @@ function confirmNewEmail(newEmail) {
     return answer;
 }
 
+// for input validations =============================
+
 function validateNewEmail(newEmail) {
     var validRegex = /^[^@]+@\w+(\.\w+)+\w$/;
     if (validRegex.test(newEmail)) {
