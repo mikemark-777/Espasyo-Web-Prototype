@@ -216,14 +216,6 @@ function validateEmail(email) {
     }
 }
 
-function validatePassword(password) {
-    if (password.length < 6) {
-        return false;
-    } else {
-        return true;
-    }
-}
-
 function validateInput(input) {
     if (input == null) {
         return false;
@@ -235,6 +227,16 @@ function validateInput(input) {
         return true;
     }
 }
+
+function validatePassword(password) {
+    if (password.length < 6) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+
 
 auth.onAuthStateChanged(function(user) {
     if (user != null) {

@@ -91,7 +91,6 @@ function renderAdminToTable(adminID, firstName, lastName, email, password) {
     passwordBox.className += "passwordBox";
     eyelash.className += "bi-eye-slash";
     eyelash.id = "togglePassword";
-    eyelash.innerHTML = "show";
     td4.appendChild(passwordBox);
     td4.appendChild(eyelash);
 
@@ -108,12 +107,8 @@ function renderAdminToTable(adminID, firstName, lastName, email, password) {
         // toggle the type attribute
         const type = passwordBox.getAttribute('type') === 'password' ? 'text' : 'password';
         passwordBox.setAttribute('type', type);
-        // toggle the eye / eye slash icon
-        if (eyelash.innerText == "show") {
-            eyelash.innerHTML = "hide";
-        } else {
-            eyelash.innerHTML = "show";
-        }
+        // toggle the icon
+        this.classList.toggle("bi-eye");
 
     }
 
@@ -311,7 +306,7 @@ function changeEmailInDatabase(adminID, newEmail) {
                 .then(() => {
                     //email is changed in both admins and users collection in the database
                     logoutAdminForChanges();
-                    window.alert("Email has been changed");
+                    window.alert("Admin Email has been changed");
                     window.location.assign("manage-admin.html");
                 })
                 .catch((error) => {
@@ -323,7 +318,34 @@ function changeEmailInDatabase(adminID, newEmail) {
         });
 }
 
+
 // FOR UPDATING ADMIN PASSWORD ====================================================
+
+function changePasswordInDatabase(adminID, newPassword) {
+    var adminCollectionRef = database.collection("admins").doc(adminID);
+    var usersCollectionRef = database.collection("users").doc(adminID);
+
+    adminCollectionRef.update({
+            password: newPassword
+        })
+        .then(() => {
+            usersCollectionRef.update({
+                    password: newPassword
+                })
+                .then(() => {
+                    //password is changed in both admins and users collection in the database
+                    logoutAdminForChanges();
+                    window.alert("Admin Password has been changed");
+                    window.location.assign("manage-admin.html");
+                })
+                .catch((error) => {
+                    window.alert(error.message);
+                });
+        })
+        .catch((error) => {
+            window.alert(error.message);
+        });
+}
 
 //will display the data of the admin whose email will be changed
 function fetchAndDisplayAdminData_updatePassword() {
