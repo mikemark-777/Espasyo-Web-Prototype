@@ -39,7 +39,6 @@ function changePassword() {
     var newPassword = newPasswordInput.value;
     var confirmPassword = confirmPasswordInput.value;
 
-
     if (isThereEmptyPasswordInput(newPassword, confirmPassword) != true) {
         if (arePasswordsValid(newPassword, confirmPassword) == true) {
             if (arePasswordsMatch(newPassword, confirmPassword) == true) {

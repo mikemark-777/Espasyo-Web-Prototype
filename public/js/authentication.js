@@ -20,21 +20,26 @@ function signUp() {
     emailTextbox.style.border = '1px solid #777';
     passwordTextbox.style.border = '1px solid #777';
 
-    window.alert(isLastNameEmpty(lastName));
 
     //check if inputs are empty
-    if (areInputsEmpty(firstName, lastName, email, password) == true) {
-        showError("Please fillout everything");
-        return;
+    if (isThereEmptyInput(firstName, lastName, email, password) != true) {
+        if (validateEmail(email) == true) {
+            //check email if is in correct format
+            if (validateEmail(email) == false) {
+                emailTextbox.focus();
+                emailTextbox.style.border = '1px solid rgb(235, 72, 72)';
+                showError("Email has an incorrect format");
+                return;
+            }
+        } else {
+            emailTextbox.focus();
+            emailTextbox.style.border = '1px solid rgb(235, 72, 72)';
+            showError("Email has an incorrect format");
+            return;
+        }
     }
 
-    //check email if is in correct format
-    if (validateEmail(email) == false) {
-        emailTextbox.focus();
-        emailTextbox.style.border = '1px solid rgb(235, 72, 72)';
-        showError("Email has an incorrect format");
-        return;
-    }
+
 
     //check password if greater than 6 (firebaseauth accepts >= 6 password)
     if (validatePassword(password) == false) {
@@ -46,7 +51,7 @@ function signUp() {
 
     //will check first if the email provided already exists
     secondAppAuth.fetchSignInMethodsForEmail(email)
-        .then(function(signInMethods) {
+        .then(function (signInMethods) {
             if (signInMethods.length < 1) {
                 confirm
                 //if email is existing
@@ -54,7 +59,7 @@ function signUp() {
                 if (isEmailConfirmed === true) {
                     //creates user with email and password using the secondaryAppAuth
                     secondAppAuth.createUserWithEmailAndPassword(email, password)
-                        .then(function() {
+                        .then(function () {
                             var newAdmin = secondAppAuth.currentUser;
                             var newAdminID = newAdmin.uid;
 
@@ -66,10 +71,10 @@ function signUp() {
                             secondAppAuth.currentUser.sendEmailVerification()
                                 .then(() => {
                                     secondAppAuth.signOut().then(() => {
-                                            window.alert("An email verification has been sent to " + email + ". Please check your email and click the link provided to complete setting up the admin account.\n\nThank you!");
-                                            //for reload of admin list
-                                            window.location.reload();
-                                        })
+                                        window.alert("An email verification has been sent to " + email + ". Please check your email and click the link provided to complete setting up the admin account.\n\nThank you!");
+                                        //for reload of admin list
+                                        window.location.reload();
+                                    })
                                         .catch(error => {
                                             var error_code = error.code;
                                             var error_message = error.message;
@@ -86,7 +91,7 @@ function signUp() {
 
 
                         })
-                        .catch(function(error) {
+                        .catch(function (error) {
                             var error_code = error.code;
                             var error_message = error.message;
 
@@ -109,7 +114,7 @@ function signUp() {
                 window.alert("Email already exists");
             }
         })
-        .catch(function(error) {
+        .catch(function (error) {
             var error_code = error.code;
             var error_message = error.message;
 
@@ -131,7 +136,7 @@ function login() {
     }
 
     auth.signInWithEmailAndPassword(email, password)
-        .then(function() {
+        .then(function () {
             var user = auth.currentUser;
             window.alert("UserID: " + user.emailVerified);
             isLoggingIn = true;
@@ -169,7 +174,7 @@ function login() {
                 console.log("Error getting document:", error);
             });
         })
-        .catch(function(error) {
+        .catch(function (error) {
             var error_code = error.code;
             var error_message = error.message;
 
@@ -231,12 +236,10 @@ function validateInput(input) {
 
 function isFirstNameEmpty(firstName) {
     if (firstName == null) {
-        showError("First Name required");
         return true;
     }
 
     if (firstName.length <= 0) {
-        showError("First Name required");
         return true;
     } else {
         return false;
@@ -245,12 +248,10 @@ function isFirstNameEmpty(firstName) {
 
 function isLastNameEmpty(lastName) {
     if (lastName == null) {
-        showError("Last Name required");
         return true;
     }
 
     if (lastName.length <= 0) {
-        showError("Last Name required");
         return true;
     } else {
         return false;
@@ -259,12 +260,10 @@ function isLastNameEmpty(lastName) {
 
 function isEmailEmpty(email) {
     if (email == null) {
-        showError("Email required");
         return true;
     }
 
     if (email.length <= 0) {
-        showError("Email required");
         return true;
     } else {
         return false;
@@ -273,51 +272,51 @@ function isEmailEmpty(email) {
 
 function isPasswordEmpty(password) {
     if (password == null) {
-        showError("Password required");
         return true;
     }
 
     if (password.length <= 0) {
-        showError("Password required");
         return true;
     } else {
         return false;
     }
 }
 
-function areInputsEmpty(firstName, lastName, email, password) {
+function isThereEmptyInput(firstName, lastName, email, password) {
     //check if inputs are empty
     if (isFirstNameEmpty(firstName) == true && isLastNameEmpty(lastName) == true && isEmailEmpty(email) == true && isPasswordEmpty(password) == true) {
         firstNameTextbox.style.border = '1px solid rgb(235, 72, 72)';
         lastNameTextbox.style.border = '1px solid rgb(235, 72, 72)';
         emailTextbox.style.border = '1px solid rgb(235, 72, 72)';
         passwordTextbox.style.border = '1px solid rgb(235, 72, 72)';
+        showError("Please fill out everything");
         return true;
+    } else {
+        if (validateInput(firstName) == false) {
+            firstNameTextbox.style.border = '1px solid rgb(235, 72, 72)';
+            showError("Please enter first name");
+            return true;
+        }
+
+        if (validateInput(lastName) == false) {
+            lastNameTextbox.style.border = '1px solid rgb(235, 72, 72)';
+            showError("Please enter last name");
+            return true;
+        }
+
+        if (validateInput(email) == false) {
+            emailTextbox.style.border = '1px solid rgb(235, 72, 72)';
+            showError("Please enter email");
+            return true;
+        }
+
+        if (validateInput(password) == false) {
+            passwordTextbox.style.border = '1px solid rgb(235, 72, 72)';
+            showError("Please enter password");
+            return true;
+        }
     }
 
-    if(validateInput(firstName) == false) {
-        firstNameTextbox.style.border = '1px solid rgb(235, 72, 72)';
-        showError("Please enter first name");
-        return true;
-    } 
-
-    if(validateInput(lastName) == false) {
-        lastNameTextbox.style.border = '1px solid rgb(235, 72, 72)';
-        showError("Please enter last name");
-        return true;
-    }
-
-    if(validateInput(email) == false) {
-        emailTextbox.style.border = '1px solid rgb(235, 72, 72)';
-        showError("Please enter email");
-        return true;
-    }
-
-    if(validateInput(password) == false) {
-        passwordTextbox.style.border = '1px solid rgb(235, 72, 72)';
-        showError("Please enter password");
-        return true;
-    }
 }
 
 function validatePassword(password) {
@@ -330,7 +329,7 @@ function validatePassword(password) {
 
 
 
-auth.onAuthStateChanged(function(user) {
+auth.onAuthStateChanged(function (user) {
     if (user != null) {
         if (isLoggingIn == false) {
             if (window.location.pathname == "/public/index.html") {
@@ -374,7 +373,7 @@ function removeIsSuperAdmin() {
 //for deleting and updating admin email, password
 function loginAdminForChanges(email, password) {
     secondAppAuth.signInWithEmailAndPassword(email, password)
-        .then(function() {
+        .then(function () {
             //nothing will happen
         })
         .catch((error) => {
