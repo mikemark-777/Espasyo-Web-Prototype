@@ -116,3 +116,18 @@ body {
     -moz-transition: 0.3s;
     font-family: 'Nunito', sans-serif;
 }
+
+
+/* for error display */
+
+#error-container {
+    width: 300px;
+    background: #ff7070;
+    display: none;
+    padding: 10px;
+    color: #fff;
+    border-radius: 4px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    font-size: small;
+}

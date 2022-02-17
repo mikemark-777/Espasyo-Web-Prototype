@@ -25,7 +25,11 @@ btnCancelChangePassword.onclick = function() {
     window.location.replace("manage-admin.html");
 }
 
-
+function checkIfHasAdminToChangePassword() {
+    if (getAdminIDToUpdatePassword() == null) {
+        window.location.assign("manage-admin.html");
+    }
+}
 
 function changePassword() {
 
@@ -108,19 +112,20 @@ function isConfirmPasswordEmpty(confirmPassword) {
 function isThereEmptyPasswordInput(newPassword, confirmPassword) {
 
     if (isNewPasswordEmpty(newPassword) == true && isConfirmPasswordEmpty(confirmPassword) == true) {
-        showError("New Password and Confirm Password is Empty");
-        //must highlight the password boxes
+        newPasswordInput.style.border = '1px solid rgb(235, 72, 72)';
+        confirmPasswordInput.style.border = '1px solid rgb(235, 72, 72)';
+        showError("New Password and Confirm Password are Empty");
         return true;
     } else {
         if (isNewPasswordEmpty(newPassword) == true) {
+            newPasswordInput.style.border = '1px solid rgb(235, 72, 72)';
             showError("New Password is Empty");
-            //must highlight the password box
             return true;
         }
 
         if (isConfirmPasswordEmpty(confirmPassword) == true) {
+            confirmPasswordInput.style.border = '1px solid rgb(235, 72, 72)';
             showError("Confirm Password is Empty");
-            //must highlight the password box
             return true;
         }
 
@@ -141,13 +146,14 @@ function arePasswordsValid(newPassword, confirmPassword) {
         if (validatePassword(confirmPassword) == true) {
             return true;
         } else {
+            confirmPasswordInput.style.border = '1px solid rgb(235, 72, 72)';
             showError("Confirm Password is less than 6 characters");
             //must highlight the password box
             return false;
         }
     } else {
+        newPasswordInput.style.border = '1px solid rgb(235, 72, 72)';
         showError("New Password is less than 6 characters");
-        //must highlight the password box
         return false;
     }
 }
@@ -191,4 +197,6 @@ function hideError() {
     var samp = document.getElementById("error-container");
     //hide error box
     samp.style.display = "none";
+    newPasswordInput.style.border = '1px solid #777';
+    confirmPasswordInput.style.border = '1px solid #777';
 }

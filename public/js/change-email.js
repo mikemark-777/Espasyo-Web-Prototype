@@ -1,3 +1,5 @@
+var newEmailInput = document.getElementById("new-emailInput");
+
 function gotoChangeAdminEmailPage(adminID) {
     window.location.assign("change-admin-email.html");
     setAdminIDToChangeEmail(adminID);
@@ -43,17 +45,19 @@ function removeAdminIDToChangeEmail() {
 }
 
 function changeEmail() {
+    hideError();
     var newEmailInput = document.getElementById("new-emailInput");
     var newEmail = newEmailInput.value;
 
     if (validateInput(newEmail) == false) {
-        window.alert("Please enter New Email");
+        showError("Please enter New Email");
+        newEmailInput.style.border = '1px solid rgb(235, 72, 72)';
         return;
     }
 
     if (validateNewEmail(newEmail) == false) {
+        showError("Email has an incorrect format");
         newEmailInput.style.border = '1px solid rgb(235, 72, 72)';
-        window.alert("Email has an incorrect format");
         return;
     }
 
@@ -81,8 +85,8 @@ function changeEmail() {
             } else {
                 // focus on email textbox
                 newEmailInput.focus();
+                showError("Email already exists");
                 newEmailInput.style.border = '1px solid rgb(235, 72, 72)';
-                window.alert("Email already exists");
             }
         })
         .catch(function(error) {
@@ -90,7 +94,8 @@ function changeEmail() {
             var error_message = error.message;
 
             if (error_code == "auth/email-already-in-use") {
-                window.alert("Email already exists");
+                showError("Email already exists");
+                newEmailInput.style.border = '1px solid rgb(235, 72, 72)';
             }
         });
 }
@@ -134,4 +139,19 @@ function validateInput(input) {
     } else {
         return true;
     }
+}
+
+//for errors
+function showError(error_message) {
+    var samp = document.getElementById("error-container");
+    //show error box
+    samp.style.display = "block";
+    samp.innerText = error_message;
+}
+
+function hideError() {
+    var samp = document.getElementById("error-container");
+    //hide error box
+    samp.style.display = "none";
+    newEmailInput.style.border = '1px solid #777';
 }
