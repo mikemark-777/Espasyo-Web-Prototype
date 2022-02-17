@@ -23,106 +23,97 @@ function signUp() {
 
     //check if inputs are empty
     if (isThereEmptyInput(firstName, lastName, email, password) != true) {
+        //check email if is in correct format
         if (validateEmail(email) == true) {
-            //check email if is in correct format
-            if (validateEmail(email) == false) {
-                emailTextbox.focus();
-                emailTextbox.style.border = '1px solid rgb(235, 72, 72)';
-                showError("Email has an incorrect format");
+            //check password if greater than 6 (firebaseauth accepts >= 6 password)
+            if (validatePassword(password) == true) {
+                // //will check first if the email provided already exists
+                secondAppAuth.fetchSignInMethodsForEmail(email)
+                    .then(function (signInMethods) {
+                        if (signInMethods.length < 1) {
+                            confirm
+                            //if email is existing
+                            var isEmailConfirmed = confirmEmail(email);
+                            if (isEmailConfirmed === true) {
+                                //creates user with email and password using the secondaryAppAuth
+                                secondAppAuth.createUserWithEmailAndPassword(email, password)
+                                    .then(function () {
+                                        var newAdmin = secondAppAuth.currentUser;
+                                        var newAdminID = newAdmin.uid;
+
+                                        //create a new admin object and will save the user to the firestore database
+                                        const adminObj = new Admin(newAdminID, firstName, lastName, email, password, 1);
+                                        saveUserDataToDatabase(adminObj);
+
+                                        //this will send an email verification to the email of the admin and then logout it here
+                                        secondAppAuth.currentUser.sendEmailVerification()
+                                            .then(() => {
+                                                secondAppAuth.signOut().then(() => {
+                                                    window.alert("An email verification has been sent to " + email + ". Please check your email and click the link provided to complete setting up the admin account.\n\nThank you!");
+                                                    //for reload of admin list
+                                                    window.location.reload();
+                                                })
+                                                    .catch(error => {
+                                                        var error_code = error.code;
+                                                        var error_message = error.message;
+
+                                                        window.alert(error_code);
+                                                    });
+                                            })
+                                            .catch(error => {
+                                                var error_code = error.code;
+                                                var error_message = error.message;
+
+                                                window.alert(error_code);
+                                            });
+
+
+                                    })
+                                    .catch(function (error) {
+                                        var error_code = error.code;
+                                        var error_message = error.message;
+
+                                        if (error_code == "auth/email-already-in-use") {
+                                            emailTextbox.focus();
+                                            emailTextbox.style.border = '2px solid rgb(235, 72, 72)';
+                                            showError("Email already exists");
+                                        }
+                                    });
+                            } else {
+                                // focus on email textbox
+                                emailTextbox.focus();
+                                emailTextbox.style.border = '2px solid rgb(235, 72, 72)';
+                                window.alert("email has been denied");
+                            }
+                        } else {
+                            emailTextbox.focus();
+                            emailTextbox.style.border = '2px solid rgb(235, 72, 72)';
+                            showError("Email already exists");
+                        }
+                    })
+                    .catch(function (error) {
+                        var error_code = error.code;
+                        var error_message = error.message;
+
+                        if (error_code == "auth/email-already-in-use") {
+                            emailTextbox.focus();
+                            emailTextbox.style.border = '2px solid rgb(235, 72, 72)';
+                            showError("Email already exists");
+                        }
+                    });
+            } else {
+                passwordTextbox.focus();
+                passwordTextbox.style.border = '2px solid rgb(235, 72, 72)';
+                showError("Password must be greater than 6");
                 return;
             }
         } else {
             emailTextbox.focus();
-            emailTextbox.style.border = '1px solid rgb(235, 72, 72)';
+            emailTextbox.style.border = '2px solid rgb(235, 72, 72)';
             showError("Email has an incorrect format");
             return;
         }
     }
-
-
-
-    //check password if greater than 6 (firebaseauth accepts >= 6 password)
-    if (validatePassword(password) == false) {
-        passwordTextbox.focus();
-        passwordTextbox.style.border = '1px solid rgb(235, 72, 72)';
-        showError("Password must be greater than 6");
-        return;
-    }
-
-    //will check first if the email provided already exists
-    secondAppAuth.fetchSignInMethodsForEmail(email)
-        .then(function (signInMethods) {
-            if (signInMethods.length < 1) {
-                confirm
-                //if email is existing
-                var isEmailConfirmed = confirmEmail(email);
-                if (isEmailConfirmed === true) {
-                    //creates user with email and password using the secondaryAppAuth
-                    secondAppAuth.createUserWithEmailAndPassword(email, password)
-                        .then(function () {
-                            var newAdmin = secondAppAuth.currentUser;
-                            var newAdminID = newAdmin.uid;
-
-                            //create a new admin object and will save the user to the firestore database
-                            const adminObj = new Admin(newAdminID, firstName, lastName, email, password, 1);
-                            saveUserDataToDatabase(adminObj);
-
-                            //this will send an email verification to the email of the admin and then logout it here
-                            secondAppAuth.currentUser.sendEmailVerification()
-                                .then(() => {
-                                    secondAppAuth.signOut().then(() => {
-                                        window.alert("An email verification has been sent to " + email + ". Please check your email and click the link provided to complete setting up the admin account.\n\nThank you!");
-                                        //for reload of admin list
-                                        window.location.reload();
-                                    })
-                                        .catch(error => {
-                                            var error_code = error.code;
-                                            var error_message = error.message;
-
-                                            window.alert(error_code);
-                                        });
-                                })
-                                .catch(error => {
-                                    var error_code = error.code;
-                                    var error_message = error.message;
-
-                                    window.alert(error_code);
-                                });
-
-
-                        })
-                        .catch(function (error) {
-                            var error_code = error.code;
-                            var error_message = error.message;
-
-                            if (error_code == "auth/email-already-in-use") {
-                                emailTextbox.focus();
-                                emailTextbox.style.border = '1px solid rgb(235, 72, 72)';
-                                showError("Email already exists");
-                            }
-                        });
-                } else {
-                    // focus on email textbox
-                    emailTextbox.focus();
-                    emailTextbox.style.border = '1px solid rgb(235, 72, 72)';
-                    window.alert("email has been denied");
-                }
-            } else {
-                // focus on email textbox
-                emailTextbox.focus();
-                emailTextbox.style.border = '1px solid rgb(235, 72, 72)';
-                window.alert("Email already exists");
-            }
-        })
-        .catch(function (error) {
-            var error_code = error.code;
-            var error_message = error.message;
-
-            if (error_code == "auth/email-already-in-use") {
-                window.alert("Email already exists");
-            }
-        });
-
 
 }
 
@@ -285,33 +276,33 @@ function isPasswordEmpty(password) {
 function isThereEmptyInput(firstName, lastName, email, password) {
     //check if inputs are empty
     if (isFirstNameEmpty(firstName) == true && isLastNameEmpty(lastName) == true && isEmailEmpty(email) == true && isPasswordEmpty(password) == true) {
-        firstNameTextbox.style.border = '1px solid rgb(235, 72, 72)';
-        lastNameTextbox.style.border = '1px solid rgb(235, 72, 72)';
-        emailTextbox.style.border = '1px solid rgb(235, 72, 72)';
-        passwordTextbox.style.border = '1px solid rgb(235, 72, 72)';
+        firstNameTextbox.style.border = '2px solid rgb(235, 72, 72)';
+        lastNameTextbox.style.border = '2px solid rgb(235, 72, 72)';
+        emailTextbox.style.border = '2px solid rgb(235, 72, 72)';
+        passwordTextbox.style.border = '2px solid rgb(235, 72, 72)';
         showError("Please fill out everything");
         return true;
     } else {
-        if (validateInput(firstName) == false) {
-            firstNameTextbox.style.border = '1px solid rgb(235, 72, 72)';
+        if (isFirstNameEmpty(firstName) == true) {
+            firstNameTextbox.style.border = '2px solid rgb(235, 72, 72)';
             showError("Please enter first name");
             return true;
         }
 
-        if (validateInput(lastName) == false) {
-            lastNameTextbox.style.border = '1px solid rgb(235, 72, 72)';
+        if (isLastNameEmpty(lastName) == true) {
+            lastNameTextbox.style.border = '2px solid rgb(235, 72, 72)';
             showError("Please enter last name");
             return true;
         }
 
-        if (validateInput(email) == false) {
-            emailTextbox.style.border = '1px solid rgb(235, 72, 72)';
+        if (isEmailEmpty(email) == true) {
+            emailTextbox.style.border = '2px solid rgb(235, 72, 72)';
             showError("Please enter email");
             return true;
         }
 
-        if (validateInput(password) == false) {
-            passwordTextbox.style.border = '1px solid rgb(235, 72, 72)';
+        if (isPasswordEmpty(password) == true) {
+            passwordTextbox.style.border = '2px solid rgb(235, 72, 72)';
             showError("Please enter password");
             return true;
         }

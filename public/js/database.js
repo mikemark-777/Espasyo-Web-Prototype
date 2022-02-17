@@ -13,21 +13,21 @@ function saveUserDataToDatabase(newAdmin) {
 
     userDocRef.withConverter(userConverter)
         .set(userObj)
-        .then(function() {
+        .then(function () {
             adminDocRef.withConverter(adminConverter)
                 .set(newAdmin)
-                .then(function() {
+                .then(function () {
                     window.alert("New Admin has been created!");
                     window.location.reload();
                 })
-                .catch(function(error) {
+                .catch(function (error) {
                     var error_code = error.code;
                     var error_message = error.message;
 
                     window.alert(error_code);
                 });
         })
-        .catch(function(error) {
+        .catch(function (error) {
             var error_code = error.code;
             var error_message = error.message;
 
@@ -57,7 +57,7 @@ function fetchListOfAdminToDatabase() {
             }
 
         })
-        .catch(function(error) {
+        .catch(function (error) {
             var error_code = error.code;
             var error_message = error.message;
 
@@ -103,7 +103,7 @@ function renderAdminToTable(adminID, firstName, lastName, email, password) {
     td5.appendChild(btnEditAdmin);
     td5.appendChild(btnDeleteAdmin);
 
-    eyelash.onclick = function() {
+    eyelash.onclick = function () {
         // toggle the type attribute
         const type = passwordBox.getAttribute('type') === 'password' ? 'text' : 'password';
         passwordBox.setAttribute('type', type);
@@ -112,11 +112,11 @@ function renderAdminToTable(adminID, firstName, lastName, email, password) {
 
     }
 
-    btnEditAdmin.onclick = function() {
+    btnEditAdmin.onclick = function () {
         showEditPopup(adminID, firstName, lastName, email, password);
     }
 
-    btnDeleteAdmin.onclick = function() {
+    btnDeleteAdmin.onclick = function () {
         gotoDeleteAdminPage(adminID);
     }
 
@@ -148,7 +148,7 @@ class User {
 }
 
 const userConverter = {
-    toFirestore: function(user) {
+    toFirestore: function (user) {
         return {
             userID: user.userID,
             email: user.email,
@@ -156,7 +156,7 @@ const userConverter = {
             userRole: user.userRole
         };
     },
-    fromFirestore: function(snapshot, options) {
+    fromFirestore: function (snapshot, options) {
         const data = snapshot.data(options);
         return new User(data.userID, data.email, data.password, data.userRole);
     }
@@ -175,7 +175,7 @@ class Admin {
 
 
 const adminConverter = {
-    toFirestore: function(admin) {
+    toFirestore: function (admin) {
         return {
             adminID: admin.adminID,
             firstName: admin.firstName,
@@ -185,7 +185,7 @@ const adminConverter = {
             userRole: admin.userRole
         };
     },
-    fromFirestore: function(snapshot, options) {
+    fromFirestore: function (snapshot, options) {
         const data = snapshot.data(options);
         return new Admin(data.adminID, data.firstName, data.lastName, data.email, data.password, data.userRole);
     }
@@ -205,7 +205,7 @@ function showEditPopup(adminID, firstName, lastName, email, password) {
     var linkToChangeEmail = document.getElementById("link-edit-email");
     var linkToChangePassword = document.getElementById("link-edit-password");
 
-    btnSaveEdit.onclick = function() {
+    btnSaveEdit.onclick = function () {
 
         firstNameEdit = firstNameTextboxEdit.value;
         lastNameEdit = lastNameTextboxEdit.value;
@@ -213,15 +213,15 @@ function showEditPopup(adminID, firstName, lastName, email, password) {
         isChangeMadeIn(firstName, lastName, firstNameEdit, lastNameEdit, adminID);
     };
 
-    btnCancelEdit.onclick = function() {
+    btnCancelEdit.onclick = function () {
         hideEditPopup();
     };
 
-    linkToChangeEmail.onclick = function() {
+    linkToChangeEmail.onclick = function () {
         gotoChangeAdminEmailPage(adminID);
     };
 
-    linkToChangePassword.onclick = function() {
+    linkToChangePassword.onclick = function () {
         // gotoChangeAdminPasswordPage(adminID);
         gotoChangeAdminPasswordPage(adminID);
     };
@@ -248,9 +248,9 @@ function editAdmin(firstName, lastName, adminID) {
     var adminDocRef = database.collection("admins").doc(adminID);
 
     adminDocRef.update({
-            firstName: firstName,
-            lastName: lastName
-        })
+        firstName: firstName,
+        lastName: lastName
+    })
         .then(() => {
             window.alert("Admin successfully edited");
             location.reload();
@@ -267,26 +267,26 @@ function fetchAndDisplayAdminData_updateEmail() {
     var adminID = getAdminIDToUpdateEmail();
     var adminCollectionRef = database.collection("admins").doc(adminID);
     adminCollectionRef.get().then((doc) => {
-            if (doc.exists) {
-                adminObject = doc.data();
-                var firstName = adminObject.firstName;
-                var lastName = adminObject.lastName;
-                var email = adminObject.email;
-                var password = adminObject.password;
+        if (doc.exists) {
+            adminObject = doc.data();
+            var firstName = adminObject.firstName;
+            var lastName = adminObject.lastName;
+            var email = adminObject.email;
+            var password = adminObject.password;
 
-                var displayFN = document.getElementById("adminFN");
-                var displayLN = document.getElementById("adminLN");
-                var displayEmail = document.getElementById("adminEmail");
+            var displayFN = document.getElementById("adminFN");
+            var displayLN = document.getElementById("adminLN");
+            var displayEmail = document.getElementById("adminEmail");
 
-                displayFN.innerText = firstName;
-                displayLN.innerText = lastName;
-                displayEmail.innerText = email;
-                loginAdminForChanges(email, password);
+            displayFN.innerText = firstName;
+            displayLN.innerText = lastName;
+            displayEmail.innerText = email;
+            loginAdminForChanges(email, password);
 
-            } else {
-                window.alert("doc dont exists");
-            }
-        })
+        } else {
+            window.alert("doc dont exists");
+        }
+    })
         .catch((error) => {
             window.alert(error);
         });
@@ -297,12 +297,12 @@ function changeEmailInDatabase(adminID, newEmail) {
     var usersCollectionRef = database.collection("users").doc(adminID);
 
     adminCollectionRef.update({
-            email: newEmail
-        })
+        email: newEmail
+    })
         .then(() => {
             usersCollectionRef.update({
-                    email: newEmail
-                })
+                email: newEmail
+            })
                 .then(() => {
                     //email is changed in both admins and users collection in the database
                     logoutAdminForChanges();
@@ -326,12 +326,12 @@ function changePasswordInDatabase(adminID, newPassword) {
     var usersCollectionRef = database.collection("users").doc(adminID);
 
     adminCollectionRef.update({
-            password: newPassword
-        })
+        password: newPassword
+    })
         .then(() => {
             usersCollectionRef.update({
-                    password: newPassword
-                })
+                password: newPassword
+            })
                 .then(() => {
                     //password is changed in both admins and users collection in the database
                     logoutAdminForChanges();
@@ -352,26 +352,26 @@ function fetchAndDisplayAdminData_updatePassword() {
     var adminID = getAdminIDToUpdatePassword();
     var adminCollectionRef = database.collection("admins").doc(adminID);
     adminCollectionRef.get().then((doc) => {
-            if (doc.exists) {
-                adminObject = doc.data();
-                var firstName = adminObject.firstName;
-                var lastName = adminObject.lastName;
-                var email = adminObject.email;
-                var password = adminObject.password;
+        if (doc.exists) {
+            adminObject = doc.data();
+            var firstName = adminObject.firstName;
+            var lastName = adminObject.lastName;
+            var email = adminObject.email;
+            var password = adminObject.password;
 
-                var displayFN = document.getElementById("adminFN");
-                var displayLN = document.getElementById("adminLN");
-                var displayEmail = document.getElementById("adminEmail");
+            var displayFN = document.getElementById("adminFN");
+            var displayLN = document.getElementById("adminLN");
+            var displayEmail = document.getElementById("adminEmail");
 
-                displayFN.innerText = firstName;
-                displayLN.innerText = lastName;
-                displayEmail.innerText = email;
-                loginAdminForChanges(email, password);
+            displayFN.innerText = firstName;
+            displayLN.innerText = lastName;
+            displayEmail.innerText = email;
+            loginAdminForChanges(email, password);
 
-            } else {
-                window.alert("doc dont exists");
-            }
-        })
+        } else {
+            window.alert("doc dont exists");
+        }
+    })
         .catch((error) => {
             window.alert(error);
         });
@@ -384,27 +384,27 @@ function fetchAndDisplayAdminData_deleteAdmin() {
     var adminID = getAdminIDToDelete();
     var adminCollectionRef = database.collection("admins").doc(adminID);
     adminCollectionRef.get().then((doc) => {
-            if (doc.exists) {
-                adminObject = doc.data();
-                var firstName = adminObject.firstName;
-                var lastName = adminObject.lastName;
-                var email = adminObject.email;
-                var password = adminObject.password;
+        if (doc.exists) {
+            adminObject = doc.data();
+            var firstName = adminObject.firstName;
+            var lastName = adminObject.lastName;
+            var email = adminObject.email;
+            var password = adminObject.password;
 
-                var displayFN = document.getElementById("adminFN");
-                var displayLN = document.getElementById("adminLN");
-                var displayEmail = document.getElementById("adminEmail");
+            var displayFN = document.getElementById("adminFN");
+            var displayLN = document.getElementById("adminLN");
+            var displayEmail = document.getElementById("adminEmail");
 
-                displayFN.innerText = firstName;
-                displayLN.innerText = lastName;
-                displayEmail.innerText = email;
+            displayFN.innerText = firstName;
+            displayLN.innerText = lastName;
+            displayEmail.innerText = email;
 
-                loginAdminForChanges(email, password);
+            loginAdminForChanges(email, password);
 
-            } else {
-                window.alert("doc dont exists");
-            }
-        })
+        } else {
+            window.alert("doc dont exists");
+        }
+    })
         .catch((error) => {
             window.alert(error);
         });
@@ -420,7 +420,7 @@ function deleteAdminData() {
             adminDocRef.delete()
                 .then(() => {
                     removeAdminIDToDelete();
-                    window.alert("Admin account deleted in database.js");
+                    window.alert("Admin account has been deleted");
                     window.location.assign("manage-admin.html");
                 })
                 .catch((error) => {

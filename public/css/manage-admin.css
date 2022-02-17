@@ -381,7 +381,7 @@ button:hover {
 #error-container {
     width: 300px;
     background: #ff7070;
-    display: block;
+    display: none;
     padding: 10px;
     color: #fff;
     border-radius: 4px;
