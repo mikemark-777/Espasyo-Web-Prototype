@@ -1,15 +1,15 @@
 // This is for the authentication of users (signup, login, logout, sending email verifications)
 
+firstNameTextbox = document.getElementById('firstNameInput');
+lastNameTextbox = document.getElementById('lastNameInput');
+emailTextbox = document.getElementById('emailInput');
+passwordTextbox = document.getElementById('passwordInput');
+
 var isLoggingIn = false;
 
 function signUp() {
     //get all input from user
-
-    firstNameTextbox = document.getElementById('firstNameInput');
-    lastNameTextbox = document.getElementById('lastNameInput');
-    emailTextbox = document.getElementById('emailInput');
-    passwordTextbox = document.getElementById('passwordInput');
-
+    hideErrorInSignUp();
     var firstName = firstNameTextbox.value;
     var lastName = lastNameTextbox.value;
     var email = emailTextbox.value;
@@ -20,20 +20,19 @@ function signUp() {
     emailTextbox.style.border = '1px solid #777';
     passwordTextbox.style.border = '1px solid #777';
 
+    window.alert(isLastNameEmpty(lastName));
+
     //check if inputs are empty
-    if (validateInput(firstName) == false || validateInput(lastName) == false || validateInput(email) == false || validateInput(password) == false) {
-        firstNameTextbox.style.border = '1px solid rgb(235, 72, 72)';
-        lastNameTextbox.style.border = '1px solid rgb(235, 72, 72)';
-        emailTextbox.style.border = '1px solid rgb(235, 72, 72)';
-        passwordTextbox.style.border = '1px solid rgb(235, 72, 72)';
-        window.alert("Please fillout everything");
+    if (areInputsEmpty(firstName, lastName, email, password) == true) {
+        showError("Please fillout everything");
         return;
     }
 
     //check email if is in correct format
     if (validateEmail(email) == false) {
+        emailTextbox.focus();
         emailTextbox.style.border = '1px solid rgb(235, 72, 72)';
-        window.alert("Email has an incorrect format");
+        showError("Email has an incorrect format");
         return;
     }
 
@@ -41,7 +40,7 @@ function signUp() {
     if (validatePassword(password) == false) {
         passwordTextbox.focus();
         passwordTextbox.style.border = '1px solid rgb(235, 72, 72)';
-        window.alert("Password must be greater than 6");
+        showError("Password must be greater than 6");
         return;
     }
 
@@ -92,7 +91,9 @@ function signUp() {
                             var error_message = error.message;
 
                             if (error_code == "auth/email-already-in-use") {
-                                window.alert("Email already exists");
+                                emailTextbox.focus();
+                                emailTextbox.style.border = '1px solid rgb(235, 72, 72)';
+                                showError("Email already exists");
                             }
                         });
                 } else {
@@ -228,6 +229,97 @@ function validateInput(input) {
     }
 }
 
+function isFirstNameEmpty(firstName) {
+    if (firstName == null) {
+        showError("First Name required");
+        return true;
+    }
+
+    if (firstName.length <= 0) {
+        showError("First Name required");
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function isLastNameEmpty(lastName) {
+    if (lastName == null) {
+        showError("Last Name required");
+        return true;
+    }
+
+    if (lastName.length <= 0) {
+        showError("Last Name required");
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function isEmailEmpty(email) {
+    if (email == null) {
+        showError("Email required");
+        return true;
+    }
+
+    if (email.length <= 0) {
+        showError("Email required");
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function isPasswordEmpty(password) {
+    if (password == null) {
+        showError("Password required");
+        return true;
+    }
+
+    if (password.length <= 0) {
+        showError("Password required");
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function areInputsEmpty(firstName, lastName, email, password) {
+    //check if inputs are empty
+    if (isFirstNameEmpty(firstName) == true && isLastNameEmpty(lastName) == true && isEmailEmpty(email) == true && isPasswordEmpty(password) == true) {
+        firstNameTextbox.style.border = '1px solid rgb(235, 72, 72)';
+        lastNameTextbox.style.border = '1px solid rgb(235, 72, 72)';
+        emailTextbox.style.border = '1px solid rgb(235, 72, 72)';
+        passwordTextbox.style.border = '1px solid rgb(235, 72, 72)';
+        return true;
+    }
+
+    if(validateInput(firstName) == false) {
+        firstNameTextbox.style.border = '1px solid rgb(235, 72, 72)';
+        showError("Please enter first name");
+        return true;
+    } 
+
+    if(validateInput(lastName) == false) {
+        lastNameTextbox.style.border = '1px solid rgb(235, 72, 72)';
+        showError("Please enter last name");
+        return true;
+    }
+
+    if(validateInput(email) == false) {
+        emailTextbox.style.border = '1px solid rgb(235, 72, 72)';
+        showError("Please enter email");
+        return true;
+    }
+
+    if(validateInput(password) == false) {
+        passwordTextbox.style.border = '1px solid rgb(235, 72, 72)';
+        showError("Please enter password");
+        return true;
+    }
+}
+
 function validatePassword(password) {
     if (password.length < 6) {
         return false;
@@ -298,6 +390,24 @@ function logoutAdminForChanges() {
         .catch((error) => {
             window.alert(error.message);
         });
+}
+
+//for errors
+function showError(error_message) {
+    var samp = document.getElementById("error-container");
+    //show error box
+    samp.style.display = "block";
+    samp.innerText = error_message;
+}
+
+function hideErrorInSignUp() {
+    var samp = document.getElementById("error-container");
+    //hide error box
+    samp.style.display = "none";
+    firstNameTextbox.style.border = '1px solid #777';
+    lastNameTextbox.style.border = '1px solid #777';
+    emailTextbox.style.border = '1px solid #777';
+    passwordTextbox.style.border = '1px solid #777';
 }
 
 //for testing==================
