@@ -15,11 +15,6 @@ function signUp() {
     var email = emailTextbox.value;
     var password = passwordTextbox.value;
 
-    firstNameTextbox.style.border = '1px solid #777';
-    lastNameTextbox.style.border = '1px solid #777';
-    emailTextbox.style.border = '1px solid #777';
-    passwordTextbox.style.border = '1px solid #777';
-
 
     //check if inputs are empty
     if (isThereEmptyInput(firstName, lastName, email, password) != true) {
