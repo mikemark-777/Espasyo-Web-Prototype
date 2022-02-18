@@ -28,7 +28,15 @@
         </ul>
     </nav>
 
-    <button class="btnLogin" onclick="isSecondAppAuthHasLoggedIn()">See SecondAppAuth</button><br>
+    <div class="tabContainer">
+        <h4 class="report-list">Report Lists</h4>
+        <div class="buttonContainer">
+            <button onclick="showPanel(0)">Properties</button>
+            <button onclick="showPanel(1)">Landlords</button>
+        </div>
+        <div class="tabPanel">Panel 1</div>
+        <div class="tabPanel">Panel 2</div>
+    </div>
 
     <!-- core firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
@@ -38,12 +46,15 @@
     <!-- firebase configuration and declarations -->
     <script src="./js/firebaseConfig.js"></script>
     <script src="./js/authentication.js"></script>
+    <script src="./js/report.js"></script>
 
     <script>
         window.onload = function () {
             if (getIsSuperAdmin() == "false") {
                 document.getElementById("btn-manage-admin").style.display = "none";
             }
+
+            showPanel(0, 'f44336');
         }
     </script>
 </body>
