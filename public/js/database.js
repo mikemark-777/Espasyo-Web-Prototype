@@ -492,7 +492,6 @@ function fetchPropertyListInDatabase() {
     var properties = [];
     var propertyCollectionRef = database.collection("properties");
 
-    window.alert("im here fetching");
     propertyCollectionRef.withConverter(propertyConverter)
         .get()
         .then((querySnapshot) => {
@@ -502,9 +501,7 @@ function fetchPropertyListInDatabase() {
                     var propertyObj = doc.data();
                     properties.push(propertyObj);
                 });
-                // renderAllAdminsToTable(admins);
-                // // showPropertyList(properties);
-                // window.alert("done");
+                renderAllPropertiesToTable(properties);
             } else {
                 window.alert("No such document!");
                 return properties;

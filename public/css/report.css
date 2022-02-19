@@ -146,6 +146,17 @@ a.active, a:hover{
     margin-bottom: 20px;
 }
 
+/* for properties table */
+
 .list-of-properties-container {
     margin-top: -100px;
+}
+
+#table-of-properties {
+    width: 100%;
+    height: min-content; 
+}
+
+#property-list-body {
+    height: min-content;
 }
