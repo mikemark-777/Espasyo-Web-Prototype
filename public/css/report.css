@@ -110,12 +110,13 @@ a.active, a:hover{
 }
 
 .tabContainer .buttonContainer {
+    width: 97%;
     height: 15%;
 }
 
 .tabContainer .buttonContainer button {
     width: 15%;
-    height: 65%;
+    height: 100%;
     float: left;
     border: none;
     outline: none;
@@ -143,4 +144,8 @@ a.active, a:hover{
 
 .report-list {
     margin-bottom: 20px;
+}
+
+.list-of-properties-container {
+    margin-top: -100px;
 }

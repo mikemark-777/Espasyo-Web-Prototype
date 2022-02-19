@@ -65,7 +65,7 @@ function fetchListOfAdminToDatabase() {
         });
 }
 
-var tbody = document.getElementById('property-list-body');
+var tbody = document.getElementById('admin-list-body');
 
 function renderAdminToTable(adminID, firstName, lastName, email, password) {
 
@@ -188,6 +188,62 @@ const adminConverter = {
     fromFirestore: function (snapshot, options) {
         const data = snapshot.data(options);
         return new Admin(data.adminID, data.firstName, data.lastName, data.email, data.password, data.userRole);
+    }
+}
+
+class Property {
+    constructor(address, imageFolder, isElectricityIncluded, isGarbageCollectionIncluded, isInternetIncluded, isLocked, isVerified, isWaterIncluded, latitude, longitude, maximumPrice, minimumPrice, name, owner, propertyID, propertyType, propriertorName, reasonLocked, verificationID) {
+        this.address = address;
+        this.imageFolder = imageFolder;
+        this.isElectricityIncluded = isElectricityIncluded;
+        this.isGarbageCollectionIncluded = isGarbageCollectionIncluded;
+        this.isInternetIncluded = isInternetIncluded;
+        this.isLocked = isLocked;
+        this.isVerified = isVerified;
+        this.isWaterIncluded = isWaterIncluded;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.maximumPrice = maximumPrice;
+        this.minimumPrice = minimumPrice;
+        this.name = name;
+        this.owner = owner;
+        this.propertyID = propertyID;
+        this.propertyType = propertyType;
+        this.propriertorName = propriertorName;
+        this.reasonLocked = reasonLocked;
+        this.verificationID = verificationID;
+    }
+}
+
+const propertyConverter = {
+    toFirestore: function (property) {
+        return {
+            address: property.address,
+            imageFolder: property.imageFolder,
+            isElectricityIncluded: property.isElectricityIncluded,
+            isGarbageCollectionIncluded: property.isGarbageCollectionIncluded,
+            isInternetIncluded: property.isInternetIncluded,
+            isLocked: property.isLocked,
+            isVerified: property.isVerified,
+            isWaterIncluded: property.isWaterIncluded,
+            latitude: property.latitude,
+            longitude: property.longitude,
+            maximumPrice: property.maximumPrice,
+            minimumPrice: property.minimumPrice,
+            name: property.name,
+            owner: property.owner,
+            propertyID: property.propertyID,
+            propertyType: property.propertyType,
+            propriertorName: property.propriertorName,
+            reasonLocked: property.reasonLocked,
+            verificationID: property.verificationID,
+        };
+    },
+    fromFirestore: function (snapshot, options) {
+        const data = snapshot.data(options);
+        return new Property(data.address, data.imageFolder, data.isElectricityIncluded, data.isGarbageCollectionIncluded, data.isInternetIncluded,
+            data.isLocked, data.isVerified, data.isWaterIncluded, data.latitude, data.longitude, data.maximumPrice, data.minimumPrice,
+            data.name, data.owner, data.propertyID, data.propertyType, data.propriertorName, data.reasonLocked, data.verificationID);
     }
 }
 
@@ -430,4 +486,77 @@ function deleteAdminData() {
         .catch((error) => {
             window.alert(error);
         });
+}
+
+function fetchPropertyListInDatabase() {
+    var properties = [];
+    var propertyCollectionRef = database.collection("properties");
+
+    window.alert("im here fetching");
+    propertyCollectionRef.withConverter(propertyConverter)
+        .get()
+        .then((querySnapshot) => {
+            if (querySnapshot) {
+                querySnapshot.forEach((doc) => {
+                    // doc.data() is never undefined for query doc snapshots
+                    var propertyObj = doc.data();
+                    properties.push(propertyObj);
+                });
+                // renderAllAdminsToTable(admins);
+                // // showPropertyList(properties);
+                // window.alert("done");
+            } else {
+                window.alert("No such document!");
+                return properties;
+            }
+        })
+        .catch(function (error) {
+            var error_code = error.code;
+            var error_message = error.message;
+
+            window.alert(error_code);
+        });
+}
+
+//dummy properties
+function generateDummyProperties() {
+
+    const dummyPropertyObj = new Property(
+        "DMM, Bayombong, NV",
+        "imagefolder_id_0123456789",
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        195.265565,
+        169.253254,
+        3000,
+        1500,
+        "Reylens Boarding House",
+        "owner_id_0123456789",
+        "property_id_0123456789",
+        "Boarding House",
+        "Helen Agub",
+        null,
+        null,
+    );
+
+    var id = "id" + Math.random().toString(16).slice(2);
+
+    var newDummyProperty = database.collection("properties").doc(id);
+
+    newDummyProperty.withConverter(propertyConverter)
+        .set(dummyPropertyObj)
+        .then(function () {
+            window.alert("A dummy has been created");
+        })
+        .catch(function (error) {
+            var error_code = error.code;
+            var error_message = error.message;
+
+            window.alert(error_code);
+        });
+
 }

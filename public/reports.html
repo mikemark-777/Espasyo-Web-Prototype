@@ -29,14 +29,33 @@
     </nav>
 
     <div class="tabContainer">
-        <h4 class="report-list">Report Lists</h4>
+        <h5 class="report-list"><b>Report Lists</b></h5>
         <div class="buttonContainer">
             <button onclick="showPanel(0)">Properties</button>
             <button onclick="showPanel(1)">Landlords</button>
         </div>
-        <div class="tabPanel">Panel 1</div>
+        <div class="tabPanel">
+
+            <div class="list-of-properties-container">
+                <div class="container mt-3">
+                    <table id="table-of-admins" class="table table-bordered">
+                        <!-- table-dark-->
+                        <thead class="thead-dark">
+                            <th>Property Name</th>
+                            <th>Address</th>
+                            <th>Type</th>
+                            <th>Landlord</th>
+                        </thead>
+                        <tbody id="property-list-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
         <div class="tabPanel">Panel 2</div>
     </div>
+
+    <button onclick="generateDummyProperties()">Create Dummy</button>
+    <h1 id="displayResult">Fetched Data Here...</h1>
 
     <!-- core firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
@@ -46,6 +65,7 @@
     <!-- firebase configuration and declarations -->
     <script src="./js/firebaseConfig.js"></script>
     <script src="./js/authentication.js"></script>
+    <script src="./js/database.js"></script>
     <script src="./js/report.js"></script>
 
     <script>
@@ -54,7 +74,7 @@
                 document.getElementById("btn-manage-admin").style.display = "none";
             }
 
-            showPanel(0, 'f44336');
+            showPanel(0);
         }
     </script>
 </body>
