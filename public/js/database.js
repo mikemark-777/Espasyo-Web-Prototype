@@ -424,6 +424,7 @@ function fetchAndDisplayAdminData_updatePassword() {
             displayEmail.innerText = email;
             loginAdminForChanges(email, password);
 
+
         } else {
             window.alert("doc dont exists");
         }

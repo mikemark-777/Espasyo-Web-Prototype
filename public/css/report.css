@@ -160,3 +160,18 @@ a.active, a:hover{
 #property-list-body {
     height: min-content;
 }
+
+/* for landlord table */
+
+.list-of-landlords-container {
+    margin-top: -100px;
+}
+
+#table-of-landlord {
+    width: 100%;
+    height: min-content; 
+}
+
+#property-list-body {
+    height: min-content;
+}

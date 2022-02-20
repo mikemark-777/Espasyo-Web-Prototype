@@ -39,6 +39,7 @@ function showLandlordList() {
     //window.alert("showing landlord list");
 }
 
+// for rendering the list of properties into the table ===============================
 
 var tbody = document.getElementById('property-list-body');
 
@@ -59,6 +60,7 @@ function renderPropertyToTable(count, name, address, type) {
     let td3 = document.createElement('td');
     let td4 = document.createElement('td');
     let td5 = document.createElement('td');
+    let td6 = document.createElement('td');
 
 
     td1.innerHTML = count;
@@ -66,12 +68,15 @@ function renderPropertyToTable(count, name, address, type) {
     td3.innerHTML = address;
     td4.innerHTML = type;
     td5.innerHTML = "landlord";
+    td6.innerHTML = "07-01-2022";
 
     trow.appendChild(td1);
     trow.appendChild(td2);
     trow.appendChild(td3);
     trow.appendChild(td4);
     trow.appendChild(td5);
+    trow.appendChild(td6);
     tbody.append(trow);
-
 }
+
+//for rendering the landlord list in the table==============================
