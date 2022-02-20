@@ -247,6 +247,36 @@ const propertyConverter = {
     }
 }
 
+class Landlord {
+    constructor(email, firstName, landlordID, lastName, password, phoneNumber, userRole) {
+        this.email = email,
+            this.firstName = firstName,
+            this.landlordID = landlordID,
+            this.lastName = lastName,
+            this.password = password,
+            this.phoneNumber = phoneNumber,
+            this.userRole = userRole
+    }
+}
+
+const landlordConverter = {
+    toFirestore: function (landlord) {
+        return {
+            email: landlord.email,
+            firstName: landlord.firstName,
+            landlordID: landlord.landlordID,
+            lastName: landlord.lastName,
+            password: landlord.password,
+            phoneNumber: landlord.phoneNumber,
+            userRole: landlord.userRole
+        };
+    },
+    fromFirestore: function (snapshot, options) {
+        const data = snapshot.data(options);
+        return new Landlord(data.email, data.firstName, data.landlordID,
+            data.lastName, data.password, data.phoneNumber, data.userRole);
+    }
+}
 
 function showEditPopup(adminID, firstName, lastName, email, password) {
     firstNameTextboxEdit = document.getElementById('firstNameEdit');
@@ -516,8 +546,35 @@ function fetchPropertyListInDatabase() {
         });
 }
 
+function fetchLandlordListInDatabase() {
+    var landlords = [];
+    var landlordCollectionRef = database.collection("landlords");
+
+    landlordCollectionRef.withConverter(landlordConverter)
+        .get()
+        .then((querySnapshot) => {
+            if (querySnapshot) {
+                querySnapshot.forEach((doc) => {
+                    // doc.data() is never undefined for query doc snapshots
+                    var landlordObj = doc.data();
+                    landlords.push(landlordObj);
+                });
+                renderAllLandlordsToTable(landlords);
+            } else {
+                window.alert("No such document!");
+                return properties;
+            }
+        })
+        .catch(function (error) {
+            var error_code = error.code;
+            var error_message = error.message;
+
+            window.alert(error_code);
+        });
+}
+
 //dummy properties
-function generateDummyProperties() {
+function generateDummyProperty() {
 
     const dummyPropertyObj = new Property(
         "DMM, Bayombong, NV",
@@ -549,6 +606,37 @@ function generateDummyProperties() {
         .set(dummyPropertyObj)
         .then(function () {
             window.alert("A dummy has been created");
+        })
+        .catch(function (error) {
+            var error_code = error.code;
+            var error_message = error.message;
+
+            window.alert(error_code);
+        });
+}
+
+//dummy properties
+function generateDummyLandlord() {
+
+
+    var id = "id" + Math.random().toString(16).slice(2);
+
+    const dummyLandlordObj = new Landlord(
+        "samplelandlord@gmail.com",
+        "Sample",
+        id,
+        "Landlord",
+        "123456",
+        "+639368530752",
+        0
+    );
+
+    var newDummyLandlord = database.collection("landlords").doc(id);
+
+    newDummyLandlord.withConverter(landlordConverter)
+        .set(dummyLandlordObj)
+        .then(function () {
+            window.alert("A dummy landlord has been created");
         })
         .catch(function (error) {
             var error_code = error.code;

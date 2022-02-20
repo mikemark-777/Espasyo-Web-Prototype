@@ -112,6 +112,7 @@ a.active, a:hover{
 .tabContainer .buttonContainer {
     width: 97%;
     height: 15%;
+    margin-left: 28px;
 }
 
 .tabContainer .buttonContainer button {
@@ -146,6 +147,17 @@ a.active, a:hover{
     margin-bottom: 20px;
 }
 
+table {
+    border-collapse: collapse;
+    height: 300px;
+}
+
+th,
+td {
+    padding: 10px 20px;
+    font-size: 14px;
+}
+
 /* for properties table */
 
 .list-of-properties-container {
@@ -159,6 +171,8 @@ a.active, a:hover{
 
 #property-list-body {
     height: min-content;
+    
+    margin-bottom: 300px;
 }
 
 /* for landlord table */
@@ -172,6 +186,8 @@ a.active, a:hover{
     height: min-content; 
 }
 
-#property-list-body {
+#landlord-list-body {
     height: min-content;
+    
+    margin-bottom: 300px;
 }

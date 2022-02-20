@@ -36,15 +36,15 @@ function showPropertyList() {
 }
 
 function showLandlordList() {
-    //window.alert("showing landlord list");
+    fetchLandlordListInDatabase();
 }
 
 // for rendering the list of properties into the table ===============================
 
-var tbody = document.getElementById('property-list-body');
+var propertiesTBody = document.getElementById('property-list-body');
 
 function renderAllPropertiesToTable(properties) {
-    tbody.innerHTML = "";
+    propertiesTBody.innerHTML = "";
     var count = 0;
     properties.forEach(property => {
         count = count + 1;
@@ -76,7 +76,42 @@ function renderPropertyToTable(count, name, address, type) {
     trow.appendChild(td4);
     trow.appendChild(td5);
     trow.appendChild(td6);
-    tbody.append(trow);
+    propertiesTBody.append(trow);
 }
 
 //for rendering the landlord list in the table==============================
+
+var landlordsTBody = document.getElementById('landlord-list-body');
+
+function renderAllLandlordsToTable(landlords) {
+    landlordsTBody.innerHTML = "";
+    var count = 0;
+    landlords.forEach(landlord => {
+        count = count + 1;
+        renderLandlordToTable(count, landlord.firstName, landlord.lastName, landlord.email, landlord.phoneNumber);
+    })
+}
+
+function renderLandlordToTable(count, firstName, lastName, email, phoneNumber) {
+
+    let trow = document.createElement("tr");
+    let td1 = document.createElement('td');
+    let td2 = document.createElement('td');
+    let td3 = document.createElement('td');
+    let td4 = document.createElement('td');
+    let td5 = document.createElement('td');
+
+
+    td1.innerHTML = count;
+    td2.innerHTML = firstName;
+    td3.innerHTML = lastName;
+    td4.innerHTML = email;
+    td5.innerHTML = phoneNumber;
+
+    trow.appendChild(td1);
+    trow.appendChild(td2);
+    trow.appendChild(td3);
+    trow.appendChild(td4);
+    trow.appendChild(td5);
+    landlordsTBody.append(trow);
+}
