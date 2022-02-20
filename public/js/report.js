@@ -27,7 +27,6 @@ function showPanel(panelIndex) {
     } else if (panelIndex == 1) {
         showLandlordList();
     }
-
 }
 
 // show property list
@@ -43,16 +42,16 @@ function showLandlordList() {
 
 var propertiesTBody = document.getElementById('property-list-body');
 
-function renderAllPropertiesToTable(properties) {
+function renderAllPropertiesToTable(properties, landlords) {
     propertiesTBody.innerHTML = "";
     var count = 0;
     properties.forEach(property => {
         count = count + 1;
-        renderPropertyToTable(count, property.name, property.address, property.propertyType);
+        renderPropertyToTable(count, property.name, property.owner, property.address, property.propertyType, landlords);
     })
 }
 
-function renderPropertyToTable(count, name, address, type) {
+function renderPropertyToTable(count, name, owner, address, type, landlords) {
 
     let trow = document.createElement("tr");
     let td1 = document.createElement('td');
@@ -67,7 +66,13 @@ function renderPropertyToTable(count, name, address, type) {
     td2.innerHTML = name;
     td3.innerHTML = address;
     td4.innerHTML = type;
-    td5.innerHTML = "landlord";
+
+    landlords.forEach(function (landlord) {
+        if (landlord.landlordID == owner) {
+            td5.innerHTML = landlord.firstName + " " + landlord.lastName;
+        }
+    });
+
     td6.innerHTML = "07-01-2022";
 
     trow.appendChild(td1);
@@ -78,6 +83,7 @@ function renderPropertyToTable(count, name, address, type) {
     trow.appendChild(td6);
     propertiesTBody.append(trow);
 }
+
 
 //for rendering the landlord list in the table==============================
 

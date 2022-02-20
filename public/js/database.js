@@ -523,19 +523,44 @@ function fetchPropertyListInDatabase() {
     var properties = [];
     var propertyCollectionRef = database.collection("properties");
 
-    propertyCollectionRef.withConverter(propertyConverter)
+    //for getting the landlord data
+    var landlords = [];
+    var landlordCollectionRef = database.collection("landlords");
+    landlordCollectionRef.withConverter(landlordConverter)
         .get()
         .then((querySnapshot) => {
             if (querySnapshot) {
                 querySnapshot.forEach((doc) => {
                     // doc.data() is never undefined for query doc snapshots
-                    var propertyObj = doc.data();
-                    properties.push(propertyObj);
+                    var landlordObj = doc.data();
+                    landlords.push(landlordObj);
                 });
-                renderAllPropertiesToTable(properties);
+
+                propertyCollectionRef.withConverter(propertyConverter)
+                    .get()
+                    .then((querySnapshot) => {
+                        if (querySnapshot) {
+                            querySnapshot.forEach((doc) => {
+                                // doc.data() is never undefined for query doc snapshots
+                                var propertyObj = doc.data();
+                                properties.push(propertyObj);
+                            });
+
+                            renderAllPropertiesToTable(properties, landlords);
+                        } else {
+                            window.alert("No such document!");
+                            return properties;
+                        }
+                    })
+                    .catch(function (error) {
+                        var error_code = error.code;
+                        var error_message = error.message;
+
+                        window.alert(error_code);
+                    });
+
             } else {
                 window.alert("No such document!");
-                return properties;
             }
         })
         .catch(function (error) {
@@ -544,6 +569,8 @@ function fetchPropertyListInDatabase() {
 
             window.alert(error_code);
         });
+
+
 }
 
 function fetchLandlordListInDatabase() {
@@ -576,6 +603,9 @@ function fetchLandlordListInDatabase() {
 //dummy properties
 function generateDummyProperty() {
 
+    var id = "id" + Math.random().toString(16).slice(2);
+
+
     const dummyPropertyObj = new Property(
         "DMM, Bayombong, NV",
         "imagefolder_id_0123456789",
@@ -589,16 +619,15 @@ function generateDummyProperty() {
         169.253254,
         3000,
         1500,
-        "Reylens Boarding House",
-        "owner_id_0123456789",
-        "property_id_0123456789",
+        "New BHouse 3",
+        "owner_id_0003",
+        id,
         "Boarding House",
         "Helen Agub",
         null,
         null,
     );
 
-    var id = "id" + Math.random().toString(16).slice(2);
 
     var newDummyProperty = database.collection("properties").doc(id);
 
@@ -623,15 +652,15 @@ function generateDummyLandlord() {
 
     const dummyLandlordObj = new Landlord(
         "samplelandlord@gmail.com",
-        "Sample",
-        id,
+        "Landlord2",
+        "owner_id_0005",
         "Landlord",
         "123456",
         "+639368530752",
         0
     );
 
-    var newDummyLandlord = database.collection("landlords").doc(id);
+    var newDummyLandlord = database.collection("landlords").doc("owner_id_0005");
 
     newDummyLandlord.withConverter(landlordConverter)
         .set(dummyLandlordObj)

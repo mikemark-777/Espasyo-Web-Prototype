@@ -31,8 +31,8 @@
     <div class="tabContainer">
         <h5 class="report-list"><b>Report Lists</b></h5>
         <div class="buttonContainer">
-            <button onclick="showPanel(0)">Properties</button>
-            <button onclick="showPanel(1)">Landlords</button>
+            <button id="tabButtons" onclick="showPanel(0)">Properties</button>
+            <button id="tabButtons" onclick="showPanel(1)">Landlords</button>
         </div>
         <div class="tabPanel">
             <div class="list-of-properties-container">
@@ -45,7 +45,7 @@
                             <th>Address</th>
                             <th>Type</th>
                             <th>Landlord</th>
-                            <th>Date Joined</th>
+                            <th>Year Joined</th>
                         </thead>
                         <tbody id="property-list-body"></tbody>
                     </table>

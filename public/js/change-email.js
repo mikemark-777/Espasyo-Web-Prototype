@@ -12,12 +12,12 @@ function displayAdminData_updateEmail() {
 }
 
 var btnChangeEmail = document.getElementById("button-change-email");
-btnChangeEmail.onclick = function() {
+btnChangeEmail.onclick = function () {
     changeEmail();
 }
 
 var btnCancelChangeEmail = document.getElementById("button-cancel-change-email");
-btnCancelChangeEmail.onclick = function() {
+btnCancelChangeEmail.onclick = function () {
     logoutAdminForChanges();
     removeAdminIDToChangeEmail();
     window.location.replace("manage-admin.html");
@@ -65,7 +65,7 @@ function changeEmail() {
 
     //will check if the email provided already exists in the system
     secondAppAuth.fetchSignInMethodsForEmail(newEmail)
-        .then(function(signInMethods) {
+        .then(function (signInMethods) {
             if (signInMethods.length < 1) {
                 //if email is not existing (can proceed)
                 var isEmailConfirmed = confirmNewEmail(newEmail);
@@ -89,7 +89,7 @@ function changeEmail() {
                 newEmailInput.style.border = '1px solid rgb(235, 72, 72)';
             }
         })
-        .catch(function(error) {
+        .catch(function (error) {
             var error_code = error.code;
             var error_message = error.message;
 
